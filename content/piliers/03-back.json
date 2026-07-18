@@ -1,0 +1,239 @@
+{
+  "pillarId": "back",
+  "title": "Backend",
+  "subtitle": "La logique serveur / API",
+  "description": "Endpoints, méthodes HTTP, authentification, fonctions serveur — tout ce qui se passe côté serveur pour faire fonctionner l'application.",
+  "icon": "\u2699\uFE0F",
+  "color": "#B5502F",
+  "order": 3,
+  "technicalSheet": {
+    "explanation": "Le backend est la partie invisible qui tourne sur le serveur. Quand votre frontend a besoin de données (utilisateurs, articles, commandes), il parle à une API — l'interface du backend. L'IA va constamment créer des endpoints, gérer l'authentification, et diagnostiquer des erreurs serveur.",
+    "utility": "C'est le pilier le plus difficile à observer car tout se passe sans interface visuelle. Comprendre API, endpoint, code HTTP vous permet de savoir ce qui se passe quand ça ne marche pas — et de ne pas prendre pour argent comptant le diagnostic de l'IA."
+  },
+  "notions": [
+    {
+      "id": "back-lesson-1",
+      "term": "API",
+      "title": "API et endpoints",
+      "order": 1,
+      "course": {
+        "explanation": "Quand votre site frontend a besoin de données (utilisateurs, articles, commandes), il parle à une API. Comprendre API, endpoint, code HTTP vous permet de savoir ce qui se passe quand ça ne marche pas.",
+        "practicalMeaning": "Une API est un contrat entre deux systèmes : le frontend envoie une requête et le backend répond avec les données demandées — ou une erreur. Chaque endpoint est une porte d'entrée spécifique.",
+        "example": "Le frontend a besoin du solde d'un utilisateur. Il appelle l'API GET /api/solde. L'API interroge la base de données et renvoie « 150 € ». Si l'URL est fausse, la porte n'existe pas — erreur 404."
+      },
+      "exercises": [
+        {
+          "id": "ex-back-api",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « Le service expose une API pour récupérer les utilisateurs. » Que signifie API ici ?",
+          "payload": { "options": ["Une interface pour communiquer avec le service", "Un fichier de configuration", "Un type de base de données", "Un environnement"], "correctIndex": 0 },
+          "relatedTermIds": ["term-api"]
+        },
+        {
+          "id": "ex-back-endpoint",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA donne l'adresse https://api.exemple.com/utilisateurs. Comment nomme-t-on cette adresse précise ?",
+          "payload": { "options": ["Un endpoint", "Un commit", "Une variable d'environnement", "Une table"], "correctIndex": 0 },
+          "relatedTermIds": ["term-endpoint"]
+        },
+        {
+          "id": "ex-back-http",
+          "type": "association_territoire",
+          "prompt": "Associez chaque statut HTTP à sa signification.",
+          "payload": { "term": "statut HTTP", "correctPlace": "404", "places": ["200", "404", "500", "301"] },
+          "relatedTermIds": ["term-http-status"]
+        },
+        {
+          "id": "ex-back-methode",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA configure un endpoint qui permet de créer un utilisateur. Quelle méthode HTTP utilise-t-elle généralement ?",
+          "payload": { "options": ["POST", "GET", "DELETE", "PUT"], "correctIndex": 0 },
+          "relatedTermIds": ["term-api"]
+        },
+        {
+          "id": "ex-back-ou",
+          "type": "association_territoire",
+          "prompt": "Où s'exécute le code backend ?",
+          "payload": { "term": "backend", "correctPlace": "Le serveur", "places": ["Le navigateur", "Le serveur", "GitHub", "SQL"] },
+          "relatedTermIds": ["term-back"]
+        }
+      ]
+    },
+    {
+      "id": "back-lesson-2",
+      "term": "Authentification",
+      "title": "Authentification et sécurité",
+      "order": 2,
+      "course": {
+        "explanation": "Connexion, tokens, CORS — l'IA manipule ces concepts pour sécuriser votre application. Cette leçon vous donne les bases pour comprendre ce qu'elle fait (et repérer si elle fait n'importe quoi).",
+        "practicalMeaning": "L'authentification est le « qui êtes-vous ? » du système. Un token permet de prouver son identité sans retaper le mot de passe à chaque requête. CORS est un mécanisme de sécurité qui contrôle quels sites peuvent appeler votre API.",
+        "example": "L'IA met en place un token JWT qui expire après 24h. Vous fermez le site et rouvrez : vous êtes toujours connecté dans l'heure, mais le lendemain il faut vous reconnecter. C'est le cycle de vie normal du token."
+      },
+      "exercises": [
+        {
+          "id": "ex-back-auth",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA met en place un système pour vérifier l'identité des utilisateurs. Comment s'appelle ce mécanisme ?",
+          "payload": { "options": ["L'authentification", "Le build", "Le rendu", "Le cache"], "correctIndex": 0 },
+          "relatedTermIds": ["term-auth"]
+        },
+        {
+          "id": "ex-back-token",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA parle d'un « token JWT » pour gérer les sessions. À quoi sert ce token ?",
+          "payload": { "options": ["À prouver qu'on est connecté sans renvoyer le mot de passe", "À stocker des fichiers", "À faire un build", "À exécuter un cron"], "correctIndex": 0 },
+          "relatedTermIds": ["term-token"]
+        },
+        {
+          "id": "ex-back-cors",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « L'erreur CORS signifie que votre frontend n'est pas autorisé à appeler cette API depuis un autre domaine. »",
+          "payload": { "affirmation": "L'erreur CORS signifie que votre frontend n'est pas autorisé à appeler cette API depuis un autre domaine.", "correctAnswer": "vrai" },
+          "relatedTermIds": ["term-cors"]
+        },
+        {
+          "id": "ex-back-secu",
+          "type": "question_de_verification",
+          "prompt": "L'IA propose de stocker les mots de passe en clair dans la base de données pour simplifier. Quelle question devez-vous poser ?",
+          "payload": {},
+          "relatedTermIds": ["term-auth"]
+        }
+      ]
+    },
+    {
+      "id": "back-lesson-3",
+      "term": "Backend",
+      "title": "Diagnostics backend",
+      "order": 3,
+      "course": {
+        "explanation": "500, timeout, CORS — ces erreurs vous les verrez souvent. L'IA vous donnera des explications. Votre job n'est pas de tout comprendre, mais de savoir ce qui est vérifiable et ce qui est une supposition.",
+        "practicalMeaning": "Les erreurs backend se détectent dans les logs serveur, les codes HTTP et les outils de test API (curl, Postman). Un 500 ne dit pas pourquoi — seulement que quelque chose s'est mal passé côté serveur.",
+        "example": "Vous appelez l'API et obtenez 500. L'IA dit : « L'erreur vient d'une boucle infinie dans la fonction. » Vous vérifiez dans les logs serveur : l'erreur dit « timeout après 30s », pas « boucle infinie ». L'IA a supposé — vous avez vérifié."
+      },
+      "exercises": [
+        {
+          "id": "ex-back-diag-1",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « L'API répond 500 à cause d'une erreur dans la base de données. On peut le confirmer dans les logs serveur. »",
+          "payload": { "affirmation": "L'API répond 500 à cause d'une erreur DB. Vérifiable dans les logs.", "correctAnswer": "vrai" },
+          "relatedTermIds": ["term-http-status", "term-log"]
+        },
+        {
+          "id": "ex-back-diag-2",
+          "type": "qcm_contextualise",
+          "prompt": "Vous appelez une API et elle ne répond pas. Que vérifiez-vous en premier ?",
+          "payload": { "options": ["Si le serveur est en ligne et joignable", "Le code source du composant", "Les polices CSS", "Le fichier package.json"], "correctIndex": 0 },
+          "relatedTermIds": ["term-back"]
+        },
+        {
+          "id": "ex-back-diag-3",
+          "type": "reperage_supposition",
+          "prompt": "Repérez la supposition : « Le timeout vient probablement d'une boucle infinie dans la fonction, d'après ce que je vois dans le code. »",
+          "payload": { "text": "Le timeout vient probablement d'une boucle infinie dans la fonction, d'après ce que je vois.", "suppositionStart": 2, "suppositionEnd": 5 },
+          "relatedTermIds": ["term-supposition"]
+        },
+        {
+          "id": "ex-back-diag-4",
+          "type": "question_de_verification",
+          "prompt": "L'IA affirme : « La fonction serverless a échoué par manque de mémoire. » Comment pouvez-vous vérifier ?",
+          "payload": {},
+          "relatedTermIds": ["term-log", "term-back"]
+        },
+        {
+          "id": "ex-back-diag-5",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre la démarche pour diagnostiquer une API qui répond 500.",
+          "payload": {
+            "steps": ["Vérifier le code de statut HTTP", "Consulter les logs serveur", "Identifier le message d'erreur", "Tester l'API avec un outil (curl/Postman)", "Corriger et redéployer"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-http-status", "term-log", "term-api"]
+        }
+      ]
+    }
+  ],
+  "validationExercises": [
+    {
+      "id": "val-back-1",
+      "type": "qcm_contextualise",
+      "prompt": "Un endpoint API retourne 500 après une modification. L'IA dit : « C'est la base de données qui plante — vous pouvez le vérifier dans les logs serveur. » Quelle est votre meilleure action ?",
+      "payload": { "options": ["Vérifier les logs serveur pour confirmer l'erreur exacte", "Redéployer la version précédente", "Modifier le frontend pour cacher l'erreur", "Contacter le support Supabase"], "correctIndex": 0 },
+      "relatedTermIds": ["term-api", "term-endpoint", "term-http-status", "term-log"]
+    },
+    {
+      "id": "val-back-2",
+      "type": "question_de_verification",
+      "prompt": "L'IA dit : « L'utilisateur n'est pas authentifié car son token a expiré, et c'est pour ça que l'API renvoie une erreur 401. » Quelle question posez-vous pour vérifier ?",
+      "payload": {},
+      "relatedTermIds": ["term-auth", "term-token", "term-http-status"]
+    },
+    {
+      "id": "val-back-3",
+      "type": "remise_en_ordre",
+      "prompt": "Remettez dans l'ordre le parcours d'une requête API réussie.",
+      "payload": {
+        "steps": ["Le frontend envoie une requête HTTP à l'endpoint", "Le serveur reçoit la requête et vérifie le token d'auth", "Le backend exécute la logique (interroge la DB)", "Le serveur construit la réponse HTTP 200", "Le frontend reçoit les données et met à jour l'affichage"],
+        "correctOrder": [0, 1, 2, 3, 4]
+      },
+      "relatedTermIds": ["term-api", "term-endpoint", "term-auth", "term-token", "term-http-status"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term-api",
+      "term": "API",
+      "shortDefinition": "Interface qui permet à deux logiciels de communiquer.",
+      "practicalMeaning": "Un contrat entre deux systèmes : votre application frontend envoie une requête à l'API du backend, et l'API répond avec les données demandées — ou une erreur.",
+      "example": "Votre site a besoin d'afficher le solde du compte d'un utilisateur. Le frontend appelle l'API GET /api/solde. L'API interroge la base de données et renvoie « 150 € ». Sans cette API, le frontend ne peut pas accéder aux données."
+    },
+    {
+      "id": "term-endpoint",
+      "term": "Endpoint",
+      "shortDefinition": "Adresse URL précise où une API répond à une requête.",
+      "practicalMeaning": "Chaque endpoint est une porte d'entrée spécifique de l'API. /utilisateurs donne la liste des utilisateurs, /commandes donne les commandes. Si l'URL est fausse, la porte n'existe pas.",
+      "example": "L'IA dit : « J'ai créé l'endpoint POST /api/inscription. Envoyez-y le nom et l'email, et il crée un nouveau compte. » Vous testez avec https://votresite.fr/api/inscription — ça fonctionne."
+    },
+    {
+      "id": "term-http-status",
+      "term": "Code HTTP (statut)",
+      "shortDefinition": "Nombre à 3 chiffres indiquant le résultat d'une requête HTTP.",
+      "practicalMeaning": "200 = OK, 404 = page/ressource introuvable, 500 = erreur interne du serveur. Ces trois codes couvrent 90 % des situations que vous rencontrerez.",
+      "example": "Vous ouvrez la console F12 et voyez une requête vers /api/produits qui retourne 500. L'IA explique : « Il y a une erreur dans le code du endpoint. Regardons les logs. » Puis elle corrige et le code passe à 200."
+    },
+    {
+      "id": "term-auth",
+      "term": "Authentification",
+      "shortDefinition": "Vérification de l'identité d'un utilisateur.",
+      "practicalMeaning": "C'est le « qui êtes-vous ? » du système. Généralement email + mot de passe. Si l'authentification est mal faite, n'importe qui peut accéder aux comptes.",
+      "example": "Un utilisateur reçoit un email : « Quelqu'un s'est connecté à votre compte depuis un nouvel appareil. » C'est le système d'authentification qui a détecté une connexion inhabituelle."
+    },
+    {
+      "id": "term-token",
+      "term": "Token / Jeton",
+      "shortDefinition": "Preuve numérique temporaire qu'on est bien connecté.",
+      "practicalMeaning": "Après connexion, le serveur vous donne un token (une chaîne de caractères). Vous le renvoyez à chaque requête pour prouver votre identité sans retaper le mot de passe. Quand il expire, il faut se reconnecter.",
+      "example": "Vous vous connectez sur votre site. L'IA dit : « Le token JWT est stocké dans votre navigateur pour 24h. Si vous fermez le site et rouvrez dans l'heure, vous êtes encore connecté. Après 24h, il faudra vous reconnecter. »"
+    },
+    {
+      "id": "term-cors",
+      "term": "CORS",
+      "shortDefinition": "Mécanisme de sécurité qui contrôle quelles origines peuvent accéder à une API.",
+      "practicalMeaning": "Empêche un site extérieur d'appeler votre API sans autorisation. C'est une cause fréquente d'erreurs en développement, surtout quand le frontend et le backend sont sur des domaines différents.",
+      "example": "Vous développez en local sur http://localhost:3000 et l'API est sur https://api.exemple.com. L'erreur dans la console dit : « CORS: No 'Access-Control-Allow-Origin' header ». L'IA doit configurer le backend pour autoriser localhost:3000."
+    },
+    {
+      "id": "term-back",
+      "term": "Backend",
+      "shortDefinition": "Partie de l'application qui s'exécute sur le serveur.",
+      "practicalMeaning": "La partie invisible : elle traite les données, gère les utilisateurs, communique avec la base de données. Si le problème vient du backend, le navigateur ne peut rien y faire.",
+      "example": "Le formulaire de connexion affiche « Erreur serveur ». Vous ne pouvez pas le corriger depuis le navigateur car le bug est dans le code backend qui vérifie les mots de passe. L'IA doit modifier le code côté serveur."
+    },
+    {
+      "id": "term-serverless",
+      "term": "Fonction serverless",
+      "shortDefinition": "Fonction exécutée à la demande sur le cloud, sans serveur permanent.",
+      "practicalMeaning": "Du code qui ne tourne que quand on l'appelle. Pas de serveur à gérer (d'où le nom), mais des limites : temps d'exécution max, mémoire max. Si une fonction serverless met trop de temps, elle est tuée.",
+      "example": "L'IA crée une fonction qui génère un PDF à la demande. Vous cliquez sur « Télécharger la facture ». La fonction s'exécute, génère le PDF, et s'éteint. Si le PDF prend plus de 10 secondes, la fonction est arrêtée — et vous obtenez une erreur timeout."
+    }
+  ]
+}

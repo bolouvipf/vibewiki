@@ -1,0 +1,281 @@
+{
+  "pillarId": "transversal",
+  "title": "Outils transversaux",
+  "subtitle": "Le socle commun",
+  "description": "Git, environnement, dépendances, déploiement — les outils que vous croisez dès la première minute de toute session avec l'IA.",
+  "icon": "\uD83E\uDDF0",
+  "color": "#1E2D4F",
+  "order": 1,
+  "technicalSheet": {
+    "explanation": "Les outils transversaux sont les fondations de tout projet web. Avant même d'écrire une ligne de code fonctionnel, vous utilisez Git pour suivre les versions, npm pour gérer les dépendances, Vercel pour déployer. L'IA va constamment parler de commit, de build, de déploiement — ces mots décrivent des étapes concrètes que vous devez reconnaître.",
+    "utility": "C'est le pilier que l'IA mentionne le plus souvent, car chaque action technique implique ces outils : un bug corrigé devient un commit, un nouveau design devient un déploiement, un problème de configuration devient une variable d'environnement. Sans ces bases, vous ne pouvez pas suivre la conversation."
+  },
+  "notions": [
+    {
+      "id": "transversal-lesson-1",
+      "term": "Commit",
+      "title": "Les bases du versioning avec Git",
+      "order": 1,
+      "course": {
+        "explanation": "Votre assistant IA va régulièrement vous parler de \"commit\", \"branche\" ou \"pull request\". Ces mots décrivent comment l'historique de votre projet est organisé. Cette leçon vous donne les repères pour suivre la conversation.",
+        "practicalMeaning": "C'est comme prendre une photo de votre projet à un instant T. Chaque commit porte un message qui dit ce qui a changé et pourquoi. La branche est une copie de travail où vous pouvez expérimenter sans risque.",
+        "example": "Vous corrigez une faute dans le titre de votre page d'accueil. L'IA vous dit : « Faites un commit avec le message « fix: correction ortho titre accueil » pour que cette correction soit tracée. »"
+      },
+      "exercises": [
+        {
+          "id": "ex-trans-commit",
+          "type": "qcm_contextualise",
+          "prompt": "Vous travaillez sur une fonctionnalité et l'IA vous dit : « Enregistrez votre travail dans l'historique du projet ». Que devez-vous faire ?",
+          "payload": { "options": ["Un commit", "Un déploiement", "Créer une branche", "Fusionner une PR"], "correctIndex": 0 },
+          "relatedTermIds": ["term-commit"]
+        },
+        {
+          "id": "ex-trans-branch",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA suggère : « Créez une copie isolée du projet pour développer cette correction. » De quoi parle-t-elle ?",
+          "payload": { "options": ["D'un commit", "D'une branche", "D'un déploiement", "D'un cache"], "correctIndex": 1 },
+          "relatedTermIds": ["term-branch"]
+        },
+        {
+          "id": "ex-trans-pr",
+          "type": "qcm_contextualise",
+          "prompt": "Votre collègue envoie un lien GitHub pour faire examiner son code avant de l'ajouter à la branche principale. Qu'est-ce que c'est ?",
+          "payload": { "options": ["Un commit", "Une Pull Request", "Un déploiement", "Un webhook"], "correctIndex": 1 },
+          "relatedTermIds": ["term-pr"]
+        },
+        {
+          "id": "ex-trans-conflit",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « Un conflit de fusion signifie que votre code a supprimé le travail d'un collègue. »",
+          "payload": { "affirmation": "Un conflit de fusion signifie que votre code a supprimé le travail d'un collègue.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-merge"]
+        },
+        {
+          "id": "ex-trans-git-ou",
+          "type": "association_territoire",
+          "prompt": "Où vit l'historique complet de votre code ?",
+          "payload": { "term": "code", "correctPlace": "GitHub", "places": ["GitHub", "Vercel", "Supabase", "Variables d'environnement"] },
+          "relatedTermIds": ["term-github"]
+        }
+      ]
+    },
+    {
+      "id": "transversal-lesson-2",
+      "term": "Build",
+      "title": "Build, déploiement et environnements",
+      "order": 2,
+      "course": {
+        "explanation": "Quand l'IA dit \"le build a échoué\" ou \"c'est un problème d'environnement\", elle parle d'étapes précises entre votre code et le site en ligne. Voici de quoi comprendre ces étapes.",
+        "practicalMeaning": "Le build prépare le projet pour la production : il compile, minifie et optimise les fichiers. Le déploiement publie le résultat sur un serveur. Les environnements sont des mondes séparés (dev, test, prod).",
+        "example": "Vous lancez un déploiement. L'IA revient 30 secondes plus tard : « Le build a échoué — il manque une parenthèse fermante dans le fichier api.js, ligne 47. » Vous corrigez la ligne, relancez, et le build passe."
+      },
+      "exercises": [
+        {
+          "id": "ex-trans-build",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « Je prépare le projet pour qu'il puisse être exécuté en production. » De quelle étape s'agit-il ?",
+          "payload": { "options": ["Le commit", "Le build", "La base de données", "Le webhook"], "correctIndex": 1 },
+          "relatedTermIds": ["term-build"]
+        },
+        {
+          "id": "ex-trans-deploy",
+          "type": "qcm_contextualise",
+          "prompt": "Votre site est prêt. L'IA propose de le rendre accessible au public. Comment s'appelle cette action ?",
+          "payload": { "options": ["Le build", "Le déploiement", "Le commit", "Le cache"], "correctIndex": 1 },
+          "relatedTermIds": ["term-deployment"]
+        },
+        {
+          "id": "ex-trans-env",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Les environnements de développement, de test et de production sont identiques sur votre projet. »",
+          "payload": { "affirmation": "Les environnements de développement, de test et de production sont identiques.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-environment"]
+        },
+        {
+          "id": "ex-trans-secrets",
+          "type": "question_de_verification",
+          "prompt": "L'IA vous demande de stocker une clé API secrète dans une variable d'environnement. Pourquoi ne pas la mettre directement dans le code ?",
+          "payload": {},
+          "relatedTermIds": ["term-env-vars"]
+        },
+        {
+          "id": "ex-trans-cicd",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre le chemin du code jusqu'à l'utilisateur.",
+          "payload": {
+            "steps": ["Vous modifiez le code", "Commit et push sur GitHub", "Vercel lance un build", "Build réussi, déploiement", "L'utilisateur voit les modifs"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-commit", "term-github", "term-vercel", "term-build", "term-deployment"]
+        }
+      ]
+    },
+    {
+      "id": "transversal-lesson-3",
+      "term": "Dépendance",
+      "title": "Dépendances et tâches automatisées",
+      "order": 3,
+      "course": {
+        "explanation": "Entre les packages qu'un projet importe et les scripts qui tournent la nuit automatiquement, une grande partie de ce que fait l'IA est invisible — cette leçon vous apprend à ne pas la subir.",
+        "practicalMeaning": "Chaque dépendance est une bibliothèque externe que le projet importe. Quand une dépendance est obsolète ou vulnérable, il faut la mettre à jour. Les tâches automatisées (cron) font le travail à votre place, mais personne ne les surveille.",
+        "example": "L'IA ajoute la dépendance 'react-icons' pour avoir des icônes. Le lendemain, elle alerte : « Une faille de sécurité a été trouvée dans react-icons, mettons-la à jour. »"
+      },
+      "exercises": [
+        {
+          "id": "ex-trans-dep",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA installe une bibliothèque externe indispensable à votre projet. Comment appelle-t-on cette bibliothèque ?",
+          "payload": { "options": ["Une dépendance", "Un déploiement", "Un endpoint", "Une table"], "correctIndex": 0 },
+          "relatedTermIds": ["term-dependency"]
+        },
+        {
+          "id": "ex-trans-cron",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA configure une tâche qui vide le cache tous les jours à 3h du matin. Comment s'appelle ce type d'automatisation ?",
+          "payload": { "options": ["Une Pull Request", "Un cron job", "Un build", "Déploiement"], "correctIndex": 1 },
+          "relatedTermIds": ["term-cron"]
+        },
+        {
+          "id": "ex-trans-auto",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « Une fois configurée, une tâche automatisée fonctionne pour toujours sans surveillance. »",
+          "payload": { "affirmation": "Une tâche automatisée fonctionne pour toujours sans surveillance.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-automation"]
+        },
+        {
+          "id": "ex-trans-log",
+          "type": "qcm_contextualise",
+          "prompt": "Un script de sauvegarde échoue. Où regardez-vous pour comprendre pourquoi ?",
+          "payload": { "options": ["Les logs", "Le code source", "GitHub", "La console navigateur"], "correctIndex": 0 },
+          "relatedTermIds": ["term-log"]
+        }
+      ]
+    }
+  ],
+  "validationExercises": [
+    {
+      "id": "val-trans-1",
+      "type": "qcm_contextualise",
+      "prompt": "L'IA dit : « Votre commit est sur GitHub, le build Vercel a réussi, mais le déploiement n'est pas encore en ligne. » Quelle étape manque-t-il ?",
+      "payload": { "options": ["Le déploiement automatique après le build", "Un nouveau commit", "Créer une branche", "Vider le cache"], "correctIndex": 0 },
+      "relatedTermIds": ["term-commit", "term-build", "term-deployment", "term-github", "term-vercel"]
+    },
+    {
+      "id": "val-trans-2",
+      "type": "vrai_faux_pas_verifiable",
+      "prompt": "L'IA affirme : « Le build a échoué à cause d'une dépendance manquante. On peut le vérifier dans les logs Vercel. »",
+      "payload": { "affirmation": "Le build a échoué à cause d'une dépendance manquante. Vérifiable dans les logs Vercel.", "correctAnswer": "vrai" },
+      "relatedTermIds": ["term-build", "term-dependency", "term-log", "term-vercel"]
+    },
+    {
+      "id": "val-trans-3",
+      "type": "remise_en_ordre",
+      "prompt": "Remettez dans l'ordre la démarche pour corriger un bug de production.",
+      "payload": {
+        "steps": ["Reproduire le bug en local", "Créer une branche de correction", "Committer la correction", "Pousser sur GitHub", "Vérifier le déploiement de prévisualisation", "Fusionner la PR en production"],
+        "correctOrder": [0, 1, 2, 3, 4, 5]
+      },
+      "relatedTermIds": ["term-commit", "term-branch", "term-github", "term-deployment", "term-pr"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term-commit",
+      "term": "Commit",
+      "shortDefinition": "Enregistrement d'un ensemble de modifications dans l'historique du projet.",
+      "practicalMeaning": "C'est comme prendre une photo de votre projet à un instant T. Chaque commit porte un message qui dit ce qui a changé et pourquoi.",
+      "example": "Vous corrigez une faute dans le titre de votre page d'accueil. L'IA vous dit : « Faites un commit avec le message « fix: correction ortho titre accueil » pour que cette correction soit tracée. »"
+    },
+    {
+      "id": "term-branch",
+      "term": "Branche",
+      "shortDefinition": "Version parallèle du code pour développer sans affecter la version principale.",
+      "practicalMeaning": "Une copie de travail où vous pouvez expérimenter sans risque. Les changements ne sont visibles que sur cette copie tant que vous ne fusionnez pas.",
+      "example": "Vous voulez ajouter un bouton de paiement sans que le site en ligne ne soit impacté pendant le développement. L'IA crée une branche « ajout-paiement » et vous travaillez dedans."
+    },
+    {
+      "id": "term-merge",
+      "term": "Merge (fusion)",
+      "shortDefinition": "Opération qui intègre les changements d'une branche dans une autre.",
+      "practicalMeaning": "C'est le moment où vous rassemblez votre travail parallèle avec la version principale. Des conflits peuvent survenir si deux personnes ont modifié les mêmes lignes différemment.",
+      "example": "Vous avez terminé votre fonctionnalité sur la branche « ajout-paiement ». L'IA fusionne cette branche dans la branche principale. Soudain, elle vous dit : « Il y a un conflit sur le fichier config.js — vous et un collègue avez modifié la même ligne. »"
+    },
+    {
+      "id": "term-pr",
+      "term": "Pull Request (PR)",
+      "shortDefinition": "Demande d'intégration de code avec revue par un pair.",
+      "practicalMeaning": "Avant d'intégrer du code définitivement, on ouvre une PR pour que quelqu'un vérifie le travail. C'est une pratique de qualité et de collaboration.",
+      "example": "Vous ouvrez une Pull Request sur GitHub intitulée « Ajout page contact ». Votre collègue reçoit une notification, examine vos modifications, commente une ligne, puis approuve. Vous pouvez alors fusionner."
+    },
+    {
+      "id": "term-deployment",
+      "term": "Déploiement",
+      "shortDefinition": "Mise en ligne d'une version de l'application pour la rendre accessible.",
+      "practicalMeaning": "Publier votre site sur un serveur pour que les utilisateurs y accèdent. Peut être automatique (à chaque push) ou manuel.",
+      "example": "Vous terminez une mise à jour de votre site. L'IA clique sur « Deploy » dans Vercel. Une minute plus tard, vos clients voient la nouvelle version. Mais le déploiement échoue — et vous devez comprendre pourquoi."
+    },
+    {
+      "id": "term-build",
+      "term": "Build",
+      "shortDefinition": "Transformation du code source en un format exécutable.",
+      "practicalMeaning": "Le build prépare le projet pour la production : il compile, minifie et optimise les fichiers. Si le build échoue, le déploiement est bloqué — et c'est une bonne chose (mieux que de casser le site en ligne).",
+      "example": "Vous lancez un déploiement. L'IA revient 30 secondes plus tard : « Le build a échoué — il manque une parenthèse fermante dans le fichier api.js, ligne 47. » Vous corrigez la ligne, relancez, et le build passe."
+    },
+    {
+      "id": "term-environment",
+      "term": "Environnement",
+      "shortDefinition": "Contexte d'exécution : développement, test, production.",
+      "practicalMeaning": "Chaque environnement est un monde séparé. En développement vous testez librement. En production, les vrais utilisateurs voient le résultat. Une modification en production peut tout casser.",
+      "example": "L'IA vous dit : « Ne touchez pas aux variables d'environnement de production, modifions d'abord celles de développement pour tester. » Vous passez de dev à prod via le tableau de bord Vercel."
+    },
+    {
+      "id": "term-env-vars",
+      "term": "Variables d'environnement",
+      "shortDefinition": "Valeurs de configuration stockées hors du code (clés API, mots de passe).",
+      "practicalMeaning": "Ces valeurs sensibles ne sont jamais écrites dans le code car tout le monde peut voir le code. Elles sont configurées dans l'interface de votre hébergeur (Vercel, Supabase) ou dans un fichier .env local.",
+      "example": "Vous recevez un email : « Votre clé API Stripe est compromise car elle était dans le code pushé sur GitHub. » La leçon : la prochaine fois, mettez-la dans STRIPE_SECRET_KEY dans les variables d'environnement Vercel."
+    },
+    {
+      "id": "term-dependency",
+      "term": "Dépendance",
+      "shortDefinition": "Bibliothèque externe dont le projet a besoin pour fonctionner.",
+      "practicalMeaning": "Au lieu de tout réécrire, les projets utilisent du code existant. Chaque dépendance est listée dans un fichier (package.json). Quand une dépendance est obsolète ou vulnérable, il faut la mettre à jour.",
+      "example": "L'IA dit : « J'ajoute la dépendance 'react-icons' pour avoir des icônes sans les coder nous-mêmes. » Le lendemain, elle vous alerte : « Une faille de sécurité a été trouvée dans react-icons, mettons-la à jour. »"
+    },
+    {
+      "id": "term-github",
+      "term": "GitHub",
+      "shortDefinition": "Plateforme qui héberge le code source et gère les versions.",
+      "practicalMeaning": "C'est le disque dur central de votre code. Tout le monde peut le voir, le copier, proposer des modifications. C'est aussi un réseau social professionnel pour développeurs.",
+      "example": "Vous cherchez une bibliothèque pour envoyer des emails. L'IA vous envoie vers GitHub : « Voici le dépôt de nodemailer — regardez les issues ouvertes pour voir les bugs connus avant de l'adopter. »"
+    },
+    {
+      "id": "term-vercel",
+      "term": "Vercel",
+      "shortDefinition": "Plateforme de déploiement qui transforme le code en site web accessible.",
+      "practicalMeaning": "Vercel prend votre code depuis GitHub, le construit et le met en ligne automatiquement à chaque nouveau commit. Chaque déploiement a une URL de prévisualisation unique.",
+      "example": "Vous poussez du code sur GitHub. Quelques secondes plus tard, l'IA dit : « Le déploiement est en ligne, voici l'URL de prévisualisation : vibewiki-git-fix-123.vercel.app. Vérifions que tout est bon avant de passer en production. »"
+    },
+    {
+      "id": "term-automation",
+      "term": "Automatisation",
+      "shortDefinition": "Exécution automatique d'une tâche sans intervention humaine.",
+      "practicalMeaning": "Un robot fait le travail à votre place : sauvegardes, nettoyages, envois d'emails. Très utile mais dangereux si personne ne surveille — un échec silencieux peut passer inaperçu pendant des jours.",
+      "example": "L'IA configure une sauvegarde automatique de votre base de données tous les jours à 3h du matin. Trois semaines plus tard, vous découvrez que la sauvegarde échouait depuis le début car le disque était plein — personne n'avait regardé les logs."
+    },
+    {
+      "id": "term-cron",
+      "term": "Cron / Tâche planifiée",
+      "shortDefinition": "Système qui exécute un script à des moments définis.",
+      "practicalMeaning": "Un réveil pour votre code. La syntaxe cryptique (ex: « 0 3 * * * ») dit simplement au système : exécute cette commande tous les jours à 3h du matin.",
+      "example": "L'IA écrit : « 0 2 * * 1 /usr/bin/cleanup-temp.sh ». Vous lui demandez ce que ça veut dire. Elle explique : « Tous les lundis à 2h du matin, le serveur nettoie les fichiers temporaires. »"
+    },
+    {
+      "id": "term-log",
+      "term": "Log (journal)",
+      "shortDefinition": "Enregistrement chronologique des événements d'un système.",
+      "practicalMeaning": "C'est le journal de bord de votre application. Chaque action, erreur ou événement important y est inscrit avec une date et une heure. C'est la première chose à consulter en cas de problème.",
+      "example": "Votre site est lent. L'IA dit : « Allons voir les logs de Vercel ». Vous ouvrez et lisez : « 2026-07-18 14:32:12 ERROR: Database query timed out after 30s ». Vous savez immédiatement où chercher."
+    }
+  ]
+}

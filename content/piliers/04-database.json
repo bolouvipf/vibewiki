@@ -1,0 +1,253 @@
+{
+  "pillarId": "database",
+  "title": "Base de données",
+  "subtitle": "Les données",
+  "description": "Tables, requêtes SQL, migrations, triggers — là où vivent toutes les données de votre application. Le pilier le plus abstrait mais aussi celui aux diagnostics les plus piégeux.",
+  "icon": "\uD83D\uDCC4",
+  "color": "#5B7A5E",
+  "order": 4,
+  "technicalSheet": {
+    "explanation": "La base de données est le cerveau de votre application : toutes les données importantes y sont stockées (utilisateurs, commandes, articles). Le backend interroge la base via SQL. C'est le pilier le plus abstrait, mais celui où l'IA fait le plus de suppositions dangereuses.",
+    "utility": "Les erreurs de base de données sont les plus difficiles à diagnostiquer car tout se passe sans interface visuelle. L'IA va souvent pointer une table ou une colonne comme « responsable » d'un bug — sans pouvoir le vérifier. Comprendre NULL, requête SQL, migration et schéma vous donne les outils pour ne pas accepter ces diagnostics aveuglément."
+  },
+  "notions": [
+    {
+      "id": "database-lesson-1",
+      "term": "Table",
+      "title": "Tables et données",
+      "order": 1,
+      "course": {
+        "explanation": "Quand l'IA dit \"je vais stocker ça dans une table\" ou \"cette table contient les utilisateurs\", elle parle de la base de données. C'est là que tout ce qui compte pour votre application est conservé.",
+        "practicalMeaning": "Comme un tableau Excel : chaque ligne est un enregistrement (un utilisateur, une commande), chaque colonne est une propriété (nom, email, date). SQL (Structured Query Language) est le langage universel pour parler à la base.",
+        "example": "Vous ouvrez Supabase et voyez la table « commandes ». Une ligne affiche : id=42, utilisateur_id=7, montant=59€, date=2026-07-18. L'IA exécute SELECT * FROM commandes WHERE utilisateur_id = 7 et trouve deux commandes."
+      },
+      "exercises": [
+        {
+          "id": "ex-db-table",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « Je stocke les utilisateurs dans une table. » À quoi ressemble une table de base de données ?",
+          "payload": { "options": ["Un tableau avec lignes et colonnes", "Un fichier texte", "Un dossier", "Une URL"], "correctIndex": 0 },
+          "relatedTermIds": ["term-table"]
+        },
+        {
+          "id": "ex-db-sql",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA exécute : SELECT * FROM utilisateurs WHERE email = 'test@exemple.com'. Que fait cette commande ?",
+          "payload": { "options": ["Elle cherche un utilisateur avec cet email", "Elle supprime la table", "Elle crée un utilisateur", "Elle modifie le mot de passe"], "correctIndex": 0 },
+          "relatedTermIds": ["term-sql-query"]
+        },
+        {
+          "id": "ex-db-null",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA explique : « Cette table est responsable de l'erreur NULL dans l'API. »",
+          "payload": { "affirmation": "Cette table est responsable de l'erreur NULL dans l'API.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-table", "term-null"]
+        },
+        {
+          "id": "ex-db-ou",
+          "type": "association_territoire",
+          "prompt": "Où vit votre base de données ?",
+          "payload": { "term": "base de données", "correctPlace": "Supabase", "places": ["GitHub", "Vercel", "Supabase", "Variables d'environnement"] },
+          "relatedTermIds": ["term-supabase"]
+        },
+        {
+          "id": "ex-db-schema",
+          "type": "question_de_verification",
+          "prompt": "L'IA propose d'ajouter une colonne à une table existante. Comment s'appelle cette opération et pourquoi faut-il être prudent ?",
+          "payload": {},
+          "relatedTermIds": ["term-schema", "term-migration"]
+        }
+      ]
+    },
+    {
+      "id": "database-lesson-2",
+      "term": "Relation",
+      "title": "Relations, clés et contraintes",
+      "order": 2,
+      "course": {
+        "explanation": "Les tables ne sont pas isolées : elles se parlent via des relations et des contraintes. Comprendre ces liens vous aide à suivre le raisonnement de l'IA quand elle modifie la structure.",
+        "practicalMeaning": "Une relation (clé étrangère) lie deux tables entre elles — par exemple, une commande « appartient à » un utilisateur. Les contraintes sont les garde-fous : pas d'email en double, pas d'âge négatif. Les index accélèrent les recherches comme l'index d'un livre.",
+        "example": "L'IA supprime un utilisateur. Problème : cet utilisateur avait des commandes dans la table « commandes ». Sans relation bien configurée, les commandes deviennent orphelines — elles ne savent plus à qui elles appartiennent."
+      },
+      "exercises": [
+        {
+          "id": "ex-db-relation",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA crée une table « commandes » liée à la table « utilisateurs ». Comment s'appelle ce lien entre les tables ?",
+          "payload": { "options": ["Une relation (clé étrangère)", "Un endpoint", "Un composant", "Un build"], "correctIndex": 0 },
+          "relatedTermIds": ["term-relation"]
+        },
+        {
+          "id": "ex-db-contrainte",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « J'ai ajouté une contrainte d'unicité pour empêcher deux emails identiques. »",
+          "payload": { "affirmation": "Une contrainte d'unicité empêche les doublons sur une colonne.", "correctAnswer": "vrai" },
+          "relatedTermIds": ["term-contrainte"]
+        },
+        {
+          "id": "ex-db-index",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA propose d'ajouter un index sur la colonne email pour accélérer les recherches. À quoi sert un index ?",
+          "payload": { "options": ["À accélérer les requêtes de recherche", "À stocker plus de données", "À sécuriser la table", "À supprimer des doublons"], "correctIndex": 0 },
+          "relatedTermIds": ["term-index"]
+        },
+        {
+          "id": "ex-db-migration",
+          "type": "question_de_verification",
+          "prompt": "L'IA dit : « J'ai fait une migration pour ajouter la colonne âge. » Qu'est-ce qu'une migration et pourquoi la tester d'abord ?",
+          "payload": {},
+          "relatedTermIds": ["term-migration", "term-schema"]
+        }
+      ]
+    },
+    {
+      "id": "database-lesson-3",
+      "term": "NULL",
+      "title": "Diagnostics : le cas NULL et autres pièges",
+      "order": 3,
+      "course": {
+        "explanation": "« Cette table est responsable de la réponse NULL. » C'est la phrase qui a inspiré tout ce projet. Cette leçon vous apprend à ne pas l'accepter sans vérification.",
+        "practicalMeaning": "NULL n'est pas zéro ni vide : c'est « aucune valeur ». C'est une source fréquente de bugs, surtout quand l'IA affirme savoir exactement d'où il vient — ce qu'elle ne peut pas savoir sans vérifier avec une requête SQL.",
+        "example": "Le site affiche « Prix : » vide pour un produit. L'IA dit : « La colonne prix est NULL pour ce produit dans la table articles. » Vous vérifiez dans Supabase : en effet, le champ prix est vide pour ce produit."
+      },
+      "exercises": [
+        {
+          "id": "ex-db-diag-1",
+          "type": "qcm_contextualise",
+          "prompt": "L'API renvoie NULL pour un champ qui devrait contenir des données. Quelle est la cause la plus probable ?",
+          "payload": { "options": ["La colonne est vide dans la base de données", "Le serveur est éteint", "GitHub est en panne", "Le CSS est mal écrit"], "correctIndex": 0 },
+          "relatedTermIds": ["term-null", "term-table"]
+        },
+        {
+          "id": "ex-db-diag-2",
+          "type": "reperage_supposition",
+          "prompt": "Repérez la supposition : « Cette table est à l'origine de la réponse NULL que vous voyez dans l'API, je le sais car le champ 'name' est vide. »",
+          "payload": { "text": "Cette table est à l'origine de la réponse NULL que vous voyez dans l'API.", "suppositionStart": 0, "suppositionEnd": 3 },
+          "relatedTermIds": ["term-table", "term-null", "term-supposition"]
+        },
+        {
+          "id": "ex-db-diag-3",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre la vérification d'une réponse NULL dans l'API.",
+          "payload": {
+            "steps": ["Identifier le champ qui retourne NULL", "Vérifier si la colonne existe dans la table", "Regarder si la colonne contient des données", "Vérifier la requête SQL qui alimente ce champ", "Tester avec une requête manuelle dans Supabase"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-table", "term-sql-query", "term-null", "term-supabase"]
+        },
+        {
+          "id": "ex-db-diag-4",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « La migration a échoué car une contrainte est violée. On peut vérifier dans les logs de Supabase. »",
+          "payload": { "affirmation": "La migration a échoué pour cause de contrainte violée. Vérifiable dans les logs Supabase.", "correctAnswer": "vrai" },
+          "relatedTermIds": ["term-migration", "term-contrainte", "term-supabase"]
+        },
+        {
+          "id": "ex-db-diag-5",
+          "type": "question_de_verification",
+          "prompt": "L'IA prétend : « Le trigger a mal mis à jour la table. » Comment vérifier si un trigger s'est bien exécuté ?",
+          "payload": {},
+          "relatedTermIds": ["term-trigger", "term-log", "term-supabase"]
+        }
+      ]
+    }
+  ],
+  "validationExercises": [
+    {
+      "id": "val-db-1",
+      "type": "qcm_contextualise",
+      "prompt": "L'API renvoie NULL pour le champ email d'un utilisateur. L'IA dit : « La colonne email n'existe pas dans la table utilisateurs. » Comment vérifier cette affirmation ?",
+      "payload": { "options": ["Exécuter SELECT email FROM utilisateurs LIMIT 1 dans Supabase", "Redémarrer le serveur", "Vider le cache navigateur", "Modifier le composant frontend"], "correctIndex": 0 },
+      "relatedTermIds": ["term-table", "term-sql-query", "term-null", "term-supabase"]
+    },
+    {
+      "id": "val-db-2",
+      "type": "question_de_verification",
+      "prompt": "L'IA dit : « La migration n'a pas fonctionné car une contrainte de clé étrangère est violée. Il faut supprimer les lignes orphelines d'abord. » Comment vérifier si des lignes orphelines existent ?",
+      "payload": {},
+      "relatedTermIds": ["term-migration", "term-contrainte", "term-relation", "term-sql-query"]
+    },
+    {
+      "id": "val-db-3",
+      "type": "remise_en_ordre",
+      "prompt": "Remettez dans l'ordre la démarche pour diagnostiquer une valeur NULL remontée par l'API.",
+      "payload": {
+        "steps": ["Noter le champ qui retourne NULL", "Trouver la table correspondante dans Supabase", "Exécuter une requête SELECT pour voir les données brutes", "Vérifier que la colonne existe et contient des données", "Si la colonne est vide, décider comment la remplir"],
+        "correctOrder": [0, 1, 2, 3, 4]
+      },
+      "relatedTermIds": ["term-table", "term-sql-query", "term-null", "term-supabase"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term-table",
+      "term": "Table",
+      "shortDefinition": "Structure organisée en lignes et colonnes pour stocker des données.",
+      "practicalMeaning": "Comme un tableau Excel. Chaque ligne est un enregistrement (un utilisateur, une commande), chaque colonne est une propriété (nom, email, date).",
+      "example": "Vous ouvrez Supabase et voyez la table « commandes ». Une ligne affiche : id=42, utilisateur_id=7, montant=59€, date=2026-07-18. Une autre ligne : id=43, utilisateur_id=7, montant=120€, date=2026-07-18. L'utilisateur 7 a passé deux commandes."
+    },
+    {
+      "id": "term-sql-query",
+      "term": "Requête SQL",
+      "shortDefinition": "Question posée à une base de données pour récupérer ou modifier des données.",
+      "practicalMeaning": "SQL est le langage universel des bases de données. SELECT lit, INSERT ajoute, UPDATE modifie, DELETE supprime. L'IA écrit ces requêtes, pas vous — mais vous devez savoir ce qu'elles font.",
+      "example": "L'IA dit : « Je lance SELECT nom, email FROM utilisateurs WHERE id = 5 » pour vérifier si l'utilisateur 5 existe. La base répond : « nom=Marie, email=marie@exemple.com ». L'IA confirme : « l'utilisateur existe, le problème est ailleurs. »"
+    },
+    {
+      "id": "term-null",
+      "term": "NULL (valeur nulle)",
+      "shortDefinition": "Absence de valeur dans une cellule de base de données.",
+      "practicalMeaning": "NULL n'est pas zéro ni vide : c'est « aucune valeur ». C'est une source fréquente de bugs, surtout quand l'IA affirme savoir exactement d'où il vient — ce qu'elle ne peut pas savoir sans vérifier.",
+      "example": "Le site affiche « Prix : » vide pour un produit. L'IA dit : « La colonne prix est NULL pour ce produit dans la table articles. » Vous vérifiez dans Supabase : en effet, le champ prix est vide pour ce produit."
+    },
+    {
+      "id": "term-supabase",
+      "term": "Supabase",
+      "shortDefinition": "Plateforme de base de données et backend dans le cloud.",
+      "practicalMeaning": "C'est là que vivent toutes vos données : comptes, articles, commandes. Supabase a une interface web où vous pouvez voir les tables, lancer des requêtes SQL et consulter les logs.",
+      "example": "L'IA demande : « Allez dans votre dashboard Supabase, ouvrez la table « profils », et vérifiez si la colonne avatar_url contient des données pour l'utilisateur 12. » Vous voyez que la ligne est vide."
+    },
+    {
+      "id": "term-schema",
+      "term": "Schéma",
+      "shortDefinition": "Plan d'organisation des tables, de leurs colonnes et de leurs relations.",
+      "practicalMeaning": "Le schéma est le plan de votre base : quelles tables existent, quelles colonnes elles ont, comment elles se relient. Le modifier est risqué car tout dépend de cette structure.",
+      "example": "L'IA propose : « Ajoutons une colonne 'téléphone' à la table utilisateurs. » Si la colonne existe déjà sur certains comptes mais pas d'autres, l'ajout peut casser les formulaires qui attendent ce champ."
+    },
+    {
+      "id": "term-migration",
+      "term": "Migration",
+      "shortDefinition": "Modification de la structure de la base de données (ajout, suppression, modification de colonne).",
+      "practicalMeaning": "Changer le schéma se fait via une migration — une opération à tester impérativement avant de l'appliquer en production, car une migration ratée peut bloquer toute l'application.",
+      "example": "L'IA dit : « J'ai préparé une migration qui renomme la colonne 'adresse' en 'adresse_livraison'. On la teste d'abord sur la base de développement. » Vous validez après avoir vu que tout fonctionne encore."
+    },
+    {
+      "id": "term-relation",
+      "term": "Relation / Clé étrangère",
+      "shortDefinition": "Lien entre deux tables via une colonne partagée.",
+      "practicalMeaning": "Les tables ne vivent pas seules : une commande « appartient à » un utilisateur via une clé étrangère. Si cette relation est mal configurée, les données peuvent être orphelines.",
+      "example": "L'IA supprime un utilisateur. Problème : cet utilisateur avait des commandes dans la table « commandes ». Sans relation bien configurée, les commandes deviennent orphelines — elles ne savent plus à qui elles appartiennent."
+    },
+    {
+      "id": "term-trigger",
+      "term": "Trigger (déclencheur)",
+      "shortDefinition": "Action automatique exécutée par la base lors d'un événement (insertion, mise à jour).",
+      "practicalMeaning": "Une règle invisible qui dit : « quand X arrive, fais Y automatiquement ». Utile mais dangereux car si le trigger échoue, vous ne le voyez pas immédiatement.",
+      "example": "Vous ajoutez un nouvel utilisateur dans la table « utilisateurs ». En théorie, un trigger doit automatiquement créer son profil dans la table « profils ». Mais rien n'apparaît. Le trigger a échoué silencieusement."
+    },
+    {
+      "id": "term-contrainte",
+      "term": "Contrainte",
+      "shortDefinition": "Règle qui limite les valeurs possibles dans une colonne.",
+      "practicalMeaning": "Les contraintes sont les garde-fous de votre base : pas d'email en double, pas d'âge négatif, pas de champ obligatoire vide. Elles empêchent les données invalides.",
+      "example": "Deux comptes avec le même email viennent d'être créés. L'IA ajoute une contrainte UNIQUE sur la colonne email. Maintenant, la base rejette toute tentative d'inscription avec un email déjà existant."
+    },
+    {
+      "id": "term-index",
+      "term": "Index",
+      "shortDefinition": "Structure qui accélère la recherche dans une table.",
+      "practicalMeaning": "Comme l'index d'un livre : au lieu de parcourir toutes les pages (lignes), l'index vous mène directement à la bonne page. Accélère les recherches mais ralentit les écritures.",
+      "example": "Votre site ralentit quand vous cherchez un utilisateur par email. L'IA ajoute un index sur la colonne email. Maintenant la recherche prend 20 ms au lieu de 2 secondes."
+    }
+  ]
+}

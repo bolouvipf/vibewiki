@@ -1,0 +1,239 @@
+{
+  "pillarId": "front",
+  "title": "Frontend",
+  "subtitle": "Ce que l'utilisateur voit",
+  "description": "Composants, rendu, responsive, routes, styles — tout ce qui s'affiche dans le navigateur et que vos utilisateurs voient et utilisent.",
+  "icon": "\uD83C\uDFA8",
+  "color": "#D9A441",
+  "order": 2,
+  "technicalSheet": {
+    "explanation": "Le frontend est tout ce que l'utilisateur voit et touche : les pages, les boutons, les images, les formulaires. Quand l'IA dit \"j'ai créé un composant\" ou \"le rendu est cassé\", elle parle de la partie visible de votre application, celle qui s'exécute dans le navigateur.",
+    "utility": "C'est le pilier le plus concret car vous voyez les résultats immédiatement. Une modification du frontend change l'expérience de vos utilisateurs. Comprendre les bases (composant, props, rendu, route) vous permet de savoir ce que l'IA fait quand elle \"touche au design\"."
+  },
+  "notions": [
+    {
+      "id": "front-lesson-1",
+      "term": "Composant",
+      "title": "Composants et rendu",
+      "order": 1,
+      "course": {
+        "explanation": "Quand l'IA dit \"j'ai créé un composant\" ou \"ce composant reçoit des props\", elle parle des briques qui construisent chaque page de votre site. Cette leçon vous apprend à reconnaître ces briques.",
+        "practicalMeaning": "Chaque élément de l'écran est un composant indépendant qu'on assemble comme des Lego. Si vous changez un composant, il change partout où il est utilisé. Les props sont les réglages qu'on envoie à un composant.",
+        "example": "Le composant « CarteUtilisateur » est utilisé deux fois sur la même page : une fois avec les props « nom='Marie', age=28 » pour Marie et une fois avec « nom='Paul', age=35 » pour Paul. La carte est la même, les données changent."
+      },
+      "exercises": [
+        {
+          "id": "ex-front-composant",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « J'ai créé un composant pour afficher le profil utilisateur. » Qu'est-ce qu'un composant ?",
+          "payload": { "options": ["Une fonction réutilisable qui affiche une partie de l'interface", "Une base de données", "Un fichier de configuration", "Un serveur"], "correctIndex": 0 },
+          "relatedTermIds": ["term-component"]
+        },
+        {
+          "id": "ex-front-props",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA explique : « Ce composant accepte un nom d'utilisateur en paramètre pour l'afficher. » Comment s'appellent ces paramètres ?",
+          "payload": { "options": ["Des props", "Des tables", "Des endpoints", "Des logs"], "correctIndex": 0 },
+          "relatedTermIds": ["term-props"]
+        },
+        {
+          "id": "ex-front-rendu",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Le rendu d'une page est identique sur tous les navigateurs et tous les écrans. »",
+          "payload": { "affirmation": "Le rendu est identique sur tous les navigateurs et écrans.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-rendu"]
+        },
+        {
+          "id": "ex-front-route",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA ajoute une nouvelle page à votre site à l'adresse /contact. Comment s'appelle cette adresse dans l'application ?",
+          "payload": { "options": ["Une route", "Un endpoint", "Un composant", "Un build"], "correctIndex": 0 },
+          "relatedTermIds": ["term-route"]
+        },
+        {
+          "id": "ex-front-ou",
+          "type": "association_territoire",
+          "prompt": "Où s'exécute le code frontend ?",
+          "payload": { "term": "frontend", "correctPlace": "Le navigateur", "places": ["Le navigateur", "GitHub", "Le serveur", "La base de données"] },
+          "relatedTermIds": ["term-front"]
+        }
+      ]
+    },
+    {
+      "id": "front-lesson-2",
+      "term": "CSS",
+      "title": "Responsive et styles",
+      "order": 2,
+      "course": {
+        "explanation": "L'apparence de votre site — couleurs, espacement, adaptation au mobile — tout ça repose sur le CSS. L'IA va souvent modifier ces fichiers et il est utile de comprendre ce qu'elle fait.",
+        "practicalMeaning": "Le CSS est la peau de votre application. Il vit dans des fichiers séparés du reste du code. Si l'IA touche au CSS, elle peut modifier l'apparence sans changer le fonctionnement.",
+        "example": "L'IA ajoute une grande image sur la page d'accueil. Sur votre écran d'ordinateur, c'est parfait. Mais sur mobile, l'image déborde et cache le menu. Il faut ajouter une règle responsive pour limiter sa taille."
+      },
+      "exercises": [
+        {
+          "id": "ex-front-responsive",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « Rendez cette page responsive. » Que faut-il faire ?",
+          "payload": { "options": ["L'adapter à toutes les tailles d'écran", "La rendre plus rapide", "La sécuriser", "La déployer"], "correctIndex": 0 },
+          "relatedTermIds": ["term-responsive"]
+        },
+        {
+          "id": "ex-front-css",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA modifie l'apparence d'un bouton (couleur, taille, bordure). Quel langage utilise-t-elle ?",
+          "payload": { "options": ["CSS", "SQL", "HTTP", "Git"], "correctIndex": 0 },
+          "relatedTermIds": ["term-css"]
+        },
+        {
+          "id": "ex-front-cache",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA dit : « Les modifications CSS sont instantanément visibles pour tous les utilisateurs. »",
+          "payload": { "affirmation": "Les modifications CSS sont instantanément visibles pour tous.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-cache"]
+        },
+        {
+          "id": "ex-front-diag",
+          "type": "question_de_verification",
+          "prompt": "L'IA dit : « La page blanche vient d'une erreur JavaScript. » Comment vérifier cette affirmation ?",
+          "payload": {},
+          "relatedTermIds": ["term-console"]
+        },
+        {
+          "id": "ex-front-ordre",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre ce qui se passe quand un utilisateur visite votre site.",
+          "payload": {
+            "steps": ["Le navigateur demande la page au serveur", "Le serveur renvoie le HTML", "Le navigateur télécharge CSS et JS", "Le rendu s'affiche à l'écran", "L'utilisateur interagit avec la page"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-rendu"]
+        }
+      ]
+    },
+    {
+      "id": "front-lesson-3",
+      "term": "Console",
+      "title": "Diagnostics frontend courants",
+      "order": 3,
+      "course": {
+        "explanation": "Page blanche, bouton qui ne répond pas, style cassé — ces problèmes arrivent souvent. L'IA va proposer des causes. Cette leçon vous entraîne à les évaluer plutôt que de les accepter.",
+        "practicalMeaning": "La console développeur (F12) est la première chose à ouvrir quand quelque chose ne s'affiche pas correctement. Elle montre les erreurs JavaScript, les requêtes réseau et les avertissements.",
+        "example": "Vous appuyez sur F12, cliquez sur l'onglet « Console », et lisez : « Uncaught TypeError: user.name is undefined ». L'IA confirme : « En effet, l'API n'a pas renvoyé le champ 'name' pour cet utilisateur. »"
+      },
+      "exercises": [
+        {
+          "id": "ex-front-diag-1",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA explique : « Le bouton ne répond pas à cause d'un conflit de versions dans les dépendances backend. »",
+          "payload": { "affirmation": "Un bouton qui ne répond pas est dû à un conflit de versions backend.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": []
+        },
+        {
+          "id": "ex-front-diag-2",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA prétend que l'erreur d'hydratation vient d'une différence entre le HTML généré par le serveur et celui du navigateur. Que vérifiez-vous en premier ?",
+          "payload": { "options": ["La console du navigateur", "Les logs serveur", "GitHub", "La base de données"], "correctIndex": 0 },
+          "relatedTermIds": ["term-console"]
+        },
+        {
+          "id": "ex-front-diag-3",
+          "type": "reperage_supposition",
+          "prompt": "Repérez la supposition : « L'erreur d'affichage vient probablement d'un cache navigateur obsolète. Essayez de vider le cache. »",
+          "payload": { "text": "L'erreur d'affichage vient probablement d'un cache navigateur obsolète. Essayez de vider le cache.", "suppositionStart": 4, "suppositionEnd": 7 },
+          "relatedTermIds": ["term-cache"]
+        },
+        {
+          "id": "ex-front-diag-4",
+          "type": "question_de_verification",
+          "prompt": "L'IA vous dit : « Le style ne s'applique pas à cause d'un problème de spécificité CSS. » Comment vérifier par vous-même ?",
+          "payload": {},
+          "relatedTermIds": ["term-css"]
+        }
+      ]
+    }
+  ],
+  "validationExercises": [
+    {
+      "id": "val-front-1",
+      "type": "qcm_contextualise",
+      "prompt": "Une page affiche un bouton qui ne répond pas au clic. L'IA dit : « C'est un problème de rendu, le composant n'a pas été hydraté correctement. » Que faites-vous en premier ?",
+      "payload": { "options": ["Ouvrir la console F12 pour voir l'erreur JavaScript", "Redéployer tout le site", "Vider le cache du navigateur", "Modifier le CSS du bouton"], "correctIndex": 0 },
+      "relatedTermIds": ["term-component", "term-rendu", "term-console", "term-css"]
+    },
+    {
+      "id": "val-front-2",
+      "type": "vrai_faux_pas_verifiable",
+      "prompt": "L'IA dit : « L'erreur d'hydratation vient d'une différence de HTML entre le serveur et le navigateur. La console F12 le confirmera. »",
+      "payload": { "affirmation": "L'erreur d'hydratation est vérifiable dans la console F12.", "correctAnswer": "vrai" },
+      "relatedTermIds": ["term-rendu", "term-console"]
+    },
+    {
+      "id": "val-front-3",
+      "type": "remise_en_ordre",
+      "prompt": "Remettez dans l'ordre le diagnostic d'un problème d'affichage.",
+      "payload": {
+        "steps": ["Ouvrir la console F12", "Regarder l'erreur JavaScript affichée", "Identifier le composant ou la ligne en cause", "Vérifier les props reçues par le composant", "Demander la correction à l'IA avec le message d'erreur"],
+        "correctOrder": [0, 1, 2, 3, 4]
+      },
+      "relatedTermIds": ["term-console", "term-component", "term-props"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term-component",
+      "term": "Composant",
+      "shortDefinition": "Brique d'interface réutilisable (bouton, carte, formulaire).",
+      "practicalMeaning": "Chaque élément de l'écran est un composant indépendant qu'on assemble comme des Lego. Si vous changez un composant, il change partout où il est utilisé.",
+      "example": "Vous avez un bandeau « Offre spéciale » en haut de trois pages différentes. L'IA modifie le composant « BandeauPromo » une seule fois, et les trois pages sont mises à jour automatiquement."
+    },
+    {
+      "id": "term-props",
+      "term": "Props (propriétés)",
+      "shortDefinition": "Paramètres passés à un composant pour personnaliser son affichage.",
+      "practicalMeaning": "Comme des réglages qu'on envoie à un composant pour lui dire quoi afficher. Le même composant peut s'afficher différemment selon les props qu'il reçoit.",
+      "example": "Le composant « CarteUtilisateur » est utilisé deux fois sur la même page : une fois avec les props « nom='Marie', age=28 » pour Marie et une fois avec « nom='Paul', age=35 » pour Paul. La carte est la même, les données changent."
+    },
+    {
+      "id": "term-rendu",
+      "term": "Rendu",
+      "shortDefinition": "Affichage d'un composant ou d'une page à l'écran par le navigateur.",
+      "practicalMeaning": "C'est le moment où le code HTML/CSS/JS devient visuel. Un problème de rendu peut venir de beaucoup d'endroits — et l'IA pointera rarement la bonne cause du premier coup.",
+      "example": "L'IA modifie du code et dit : « Rafraîchissez la page ». La page reste blanche. Le rendu ne s'est pas produit. Ouvrir la console F12 montre une erreur : c'est le point de départ du diagnostic."
+    },
+    {
+      "id": "term-route",
+      "term": "Route / Page",
+      "shortDefinition": "Adresse URL qui correspond à une page spécifique du site.",
+      "practicalMeaning": "Chaque page a sa route unique. /accueil, /contact, /produits sont des routes différentes. L'IA peut en créer de nouvelles.",
+      "example": "Vous voulez une page « À propos ». L'IA ajoute un fichier « app/a-propos/page.tsx ». Maintenant, https://votresite.fr/a-propos existe et affiche le contenu."
+    },
+    {
+      "id": "term-css",
+      "term": "CSS (Style)",
+      "shortDefinition": "Langage qui définit l'apparence visuelle (couleurs, tailles, polices).",
+      "practicalMeaning": "Le CSS est la peau de votre application. Il vit dans des fichiers séparés du reste du code. Si l'IA touche au CSS, elle peut modifier l'apparence sans changer le fonctionnement.",
+      "example": "Vous trouvez que le texte est trop petit sur mobile. L'IA modifie une valeur dans le fichier CSS : « font-size: 14px → 16px ». Le texte est maintenant plus lisible — le reste de la page n'a pas bougé."
+    },
+    {
+      "id": "term-responsive",
+      "term": "Responsive",
+      "shortDefinition": "Capacité d'une page à s'adapter à toutes les tailles d'écran.",
+      "practicalMeaning": "Le site doit être aussi beau et utilisable sur un téléphone que sur un écran d'ordinateur. Une modification peut casser le responsive sans qu'on le voie depuis son PC.",
+      "example": "L'IA ajoute une grande image sur la page d'accueil. Sur votre écran d'ordinateur, c'est parfait. Mais sur mobile, l'image déborde et cache le menu. Il faut ajouter une règle responsive pour limiter sa taille."
+    },
+    {
+      "id": "term-front",
+      "term": "Frontend",
+      "shortDefinition": "Partie de l'application qui s'exécute dans le navigateur.",
+      "practicalMeaning": "Tout ce que l'utilisateur voit et touche : boutons, images, formulaires. Si le problème est visible dans le navigateur, c'est probablement un problème frontend.",
+      "example": "Le formulaire de connexion n'affiche pas le message d'erreur quand le mot de passe est faux. C'est un problème frontend : l'IA doit vérifier le code qui gère l'affichage de l'erreur."
+    },
+    {
+      "id": "term-console",
+      "term": "Console développeur",
+      "shortDefinition": "Outil du navigateur qui affiche erreurs et messages techniques (accessible via F12).",
+      "practicalMeaning": "C'est la première chose à ouvrir quand quelque chose ne s'affiche pas correctement. Elle montre les erreurs JavaScript, les requêtes réseau et les avertissements.",
+      "example": "Vous appuyez sur F12, cliquez sur l'onglet « Console », et lisez : « Uncaught TypeError: user.name is undefined ». L'IA confirme : « En effet, l'API n'a pas renvoyé le champ 'name' pour cet utilisateur. »"
+    }
+  ]
+}
