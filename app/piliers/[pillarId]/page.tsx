@@ -5,7 +5,6 @@ import { useParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { getProgress, isPillarValidated } from "@/lib/db/queries"
 import pillar1 from "@/content/piliers/01-transversal.json"
@@ -30,6 +29,11 @@ export default function PillarPage() {
   const [completedIds, setCompletedIds] = useState<readonly string[]>([])
   const [validated, setValidated] = useState(false)
 
+  const sorted = useMemo(
+    () => (pillar ? [...pillar.notions].sort((a, b) => a.order - b.order) : []),
+    [pillar],
+  )
+
   useEffect(() => {
     getProgress().then((p) => setCompletedIds(p.completedNotionIds))
     isPillarValidated(pillarId).then(setValidated)
@@ -47,7 +51,6 @@ export default function PillarPage() {
     )
   }
 
-  const sorted = useMemo(() => [...pillar.notions].sort((a, b) => a.order - b.order), [pillar])
   const colors = pillarColors[pillar.pillarId]
   const ids = completedIds
   const completedCount = ids ? sorted.filter((n) => ids.includes(n.id)).length : 0

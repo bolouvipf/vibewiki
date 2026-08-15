@@ -8,3 +8,6 @@ dev-err.txt
 .env
 .env.*
 !.env.example
+
+# Service worker généré par le build (Serwist)
+public/sw.js

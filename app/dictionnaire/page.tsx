@@ -23,13 +23,6 @@ const MASTERY_LABELS: Record<string, string> = {
   maitrise: "Ma\u00EEtrise",
 }
 
-const PILLAR_COLORS: Record<string, string> = {
-  transversal: "border-marine/20 bg-marine/5 text-marine",
-  front: "border-compass/20 bg-compass/5 text-compass",
-  back: "border-alert/20 bg-alert/5 text-alert",
-  database: "border-moss/20 bg-moss/5 text-moss",
-}
-
 export default function DictionnairePage() {
   const [terms, setTerms] = useState<Term[]>([])
   const [query, setQuery] = useState("")

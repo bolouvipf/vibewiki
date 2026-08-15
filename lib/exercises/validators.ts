@@ -55,8 +55,8 @@ export function validateQCM(payload: unknown, answer: number) {
 }
 
 export function validateVraiFaux(payload: unknown, answer: "vrai" | "faux" | "pas_verifiable") {
-  const p = payload as { affirmation: string; correctAnswer: "vrai" | "faux" | "pas_verifiable" }
-  return { correct: answer === p.correctAnswer, correctAnswer: p.correctAnswer }
+  const parsed = vraiFauxPayload.parse(payload)
+  return { correct: answer === parsed.correctAnswer, correctAnswer: parsed.correctAnswer }
 }
 
 export function validateReperage(payload: unknown, selectedStart: number, selectedEnd: number) {

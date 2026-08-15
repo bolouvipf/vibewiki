@@ -243,19 +243,19 @@ describe("Gamification enrichie", () => {
     expect(newBadges.map((b) => b.id)).not.toContain("unstoppable")
   })
 
-  it("getMasteryStage returns the 4 stages correctly", () => {
-    const { getMasteryStage } = require("@/lib/gamification/engine")
+  it("getMasteryStage returns the 4 stages correctly", async () => {
+    const { getMasteryStage } = await import("@/lib/gamification/engine")
     expect(getMasteryStage({ masteryLevel: "decouvert" })).toBe("graine")
     expect(getMasteryStage({ masteryLevel: "en_cours", cumulativeExercisesPassed: false })).toBe("pousse")
     expect(getMasteryStage({ masteryLevel: "en_cours", cumulativeExercisesPassed: true })).toBe("arbre")
     expect(getMasteryStage({ masteryLevel: "maitrise" })).toBe("etoile")
   })
 
-  it("all badges have a valid condition", () => {
-    const { BADGES } = require("@/lib/gamification/engine")
-    BADGES.forEach((badge: any) => {
+  it("all badges have a valid condition", async () => {
+    const { BADGES } = await import("@/lib/gamification/engine")
+    BADGES.forEach((badge) => {
       expect(typeof badge.condition).toBe("function")
-      expect(badge.condition({})).toBeTypeOf("boolean")
+      expect(badge.condition({} as never)).toBeTypeOf("boolean")
     })
   })
 })

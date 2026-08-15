@@ -20,7 +20,7 @@ import {
   validateRemiseEnOrdre,
   validateQuestionVerification,
 } from "@/lib/exercises/validators"
-import { getProgress, isPillarValidated, updateProgress, validatePillar } from "@/lib/db/queries"
+import { getProgress, updateProgress, validatePillar } from "@/lib/db/queries"
 import {
   addExerciseXp,
   addNotionBonusXp,
@@ -55,13 +55,11 @@ export default function ValidationPage() {
   const [xp, setXp] = useState(0)
   const [finished, setFinished] = useState(false)
   const [answers, setAnswers] = useState<boolean[]>([])
-  const [alreadyValidated, setAlreadyValidated] = useState(false)
   const [lastHeartLost, setLastHeartLost] = useState(false)
   const [sessionTracked, setSessionTracked] = useState(false)
 
   useEffect(() => {
     getGamificationState().then((s) => setHearts(s.hearts))
-    isPillarValidated(pillarId).then(setAlreadyValidated)
   }, [pillarId])
 
   const handleAnswer = useCallback(

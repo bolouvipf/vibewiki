@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -50,7 +50,6 @@ const pillarAccents: Record<string, { primary: string; light: string; text: stri
 
 export default function NotionPage() {
   const params = useParams()
-  const router = useRouter()
   const pillarId = params.pillarId as string
   const notionId = params.notionId as string
 

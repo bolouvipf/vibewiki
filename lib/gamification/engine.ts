@@ -1,4 +1,5 @@
 import { getProgress, updateProgress } from "@/lib/db/queries"
+import type { Term, UserProgress } from "@/lib/db/schema"
 
 const XP_PER_EXERCISE = 10
 const XP_PER_LESSON_BONUS = 25
@@ -7,7 +8,6 @@ const XP_PERFECT_BONUS = 15
 const XP_STREAK_BONUS = 20
 const XP_DAILY_CHALLENGE = 30
 const XP_EMERGENCY_CORRECT = 25
-const XP_EMERGENCY_PARTIAL = 5
 const MAX_HEARTS = 5
 const HEART_REGEN_HOURS = 4
 const LEAGUES = ["Bronze", "Argent", "Or", "Saphir", "Diamant"]
@@ -135,7 +135,7 @@ export interface Badge {
   name: string
   description: string
   icon: string
-  condition: (progress: any) => boolean
+  condition: (progress: UserProgress) => boolean
 }
 
 export const BADGES: Badge[] = [
@@ -159,11 +159,11 @@ export const BADGES: Badge[] = [
     description: "Maîtriser 3 termes dans chaque pilier",
     icon: "🧠",
     condition: (p) => {
-      const byPillar = (p.masteredTerms || []).reduce((acc: any, t: any) => {
+      const byPillar = (p.masteredTerms || []).reduce<Record<string, number>>((acc, t) => {
         acc[t.pillar] = (acc[t.pillar] || 0) + 1
         return acc
       }, {})
-      return Object.values(byPillar).every((c: any) => c >= 3)
+      return Object.values(byPillar).every((c) => c >= 3)
     }
   },
   {
@@ -292,7 +292,7 @@ export function generateDailyChallenge(): DailyChallenge {
 
 export type MasteryStage = "graine" | "pousse" | "arbre" | "etoile"
 
-export function getMasteryStage(term: any): MasteryStage {
+export function getMasteryStage(term: Partial<Pick<Term, "masteryLevel" | "cumulativeExercisesPassed">>): MasteryStage {
   if (term.masteryLevel === "maitrise") return "etoile"
   if (term.masteryLevel === "en_cours") {
     return term.cumulativeExercisesPassed ? "arbre" : "pousse"
@@ -330,7 +330,7 @@ export async function getGamificationState() {
     dailyChallenge: challenge,
     masteryStats: {
       totalTerms: (p.masteredTerms || []).length,
-      mastered: (p.masteredTerms || []).filter((t: any) => t.masteryLevel === "maitrise").length,
+      mastered: (p.masteredTerms || []).length,
       byStage: {
         graine: 0,
         pousse: 0,
