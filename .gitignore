@@ -3,3 +3,8 @@ node_modules/
 *.tsbuildinfo
 dev-out.txt
 dev-err.txt
+
+# Secrets — jamais commités
+.env
+.env.*
+!.env.example
