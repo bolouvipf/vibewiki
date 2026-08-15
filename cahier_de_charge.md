@@ -100,6 +100,10 @@ Aucun type d'exercice n'exige d'écrire du code.
 
 Scénarios de diagnostic rapides pour "comprendre maintenant" sans faire le parcours complet : un problème concret est présenté, l'utilisateur choisit la bonne action de vérification. Récompense XP en cas de réussite.
 
+### 2.7 Formulaire de retour testeurs
+
+Page `/retour` accessible depuis la page d'accueil : un formulaire (type de retour, message, contact optionnel) envoyé vers l'email de l'équipe (`bopiflo05@gmail.com`). En v1 le transport utilise `mailto:` (zéro dépendance backend, fonctionne hors-ligne) ; l'envoi ouvre l'application de messagerie avec le message pré-rempli. La page visitée et le navigateur sont inclus automatiquement pour faciliter le diagnostic.
+
 ---
 
 ## 3. Exigences fonctionnelles détaillées
@@ -135,6 +139,15 @@ Scénarios de diagnostic rapides pour "comprendre maintenant" sans faire le parc
 - [ ] Un scénario = un problème concret + des actions possibles.
 - [ ] La bonne action est une action de vérification, jamais une action "aveugle".
 - [ ] XP attribué en cas de bonne action (bonus si action parfaite).
+
+### 3.5 Règles du formulaire de retour
+
+- [ ] Accessible depuis l'accueil (lien "Faire un retour").
+- [ ] Champs : type de retour (bug / suggestion / avis / autre), message (obligatoire), contact (optionnel).
+- [ ] Le message est pré-rempli avec la catégorie, la page visitée et le navigateur.
+- [ ] Destinataire : bopiflo05@gmail.com.
+- [ ] En v1 : ouverture de l'application de messagerie via `mailto:` (aucune donnée stockée côté serveur).
+- [ ] Évolution v1.5 possible : routage via un service de formulaire (Formspree/Web3Forms) ou API route + SMTP, avec les headers CSP à ajuster en conséquence.
 
 ---
 
@@ -418,6 +431,32 @@ interface UserProgress {
 - Contenu étendu (nouveaux piliers, nouvelles notions).
 - Notifications de rappel (révision espacée, streak).
 
+### 11.5 Formations payantes vidéo (coming soon)
+
+**Objectif :** monétiser la promesse de Vibewiki ("comprendre, pas subir") en proposant des parcours vidéo approfondis, animés par des développeurs, dans le même concept pédagogique (explications simples → à quoi ça sert → exemple concret → comment vérifier).
+
+**Espace web en "coming soon" (v1.5) :**
+- Page `/formations` avec annonce "Bientôt disponible" et présentation des parcours prévus.
+- Appel à l'action : contact email pour rejoindre une liste d'attente.
+- Aucun paiement en v1.5 ; le paiement et le gating sont v2 (voir ci-dessous).
+
+**Catalogue envisagé (parcours vidéo animés par des devs) :**
+1. Comprendre son ordinateur — fichiers, navigateur, terminal.
+2. Piloter une IA avec Git — commits, branches, merges.
+3. Construire une page web — HTML, CSS, JavaScript.
+4. Se faire aider par des agents IA — prompt engineering, contexte, règles.
+
+**Règles à respecter :**
+- Le contenu reste dans l'esprit Vibewiki : démonstrations concrètes, pas de théorie plate, vérification systématique.
+- Les formats sont "vidéos animées par des devs" : l'écran de l'outil réel (éditeur, terminal, navigateur) plutôt qu'un cours caméra.
+- Les formations gratuites (piliers) restent gratuites ; la section payante est clairement séparée.
+- Hors périmètre v1 : le paiement, le gating vidéo et la liste d'attente ne sont pas construits en v1.
+
+**Prérequis v2 (paiement & gating) :**
+- Service de paiement (Stripe/Paddle) et gestion des accès — nécessite un backend, compatible avec le futur Supabase (section 11.3).
+- Règles de sécurité section 5.2 applicables dès qu'un compte/paiement existe.
+- Politique de confidentialité et CGV nécessaires dès qu'une transaction existe.
+
 ---
 
 ## 12. Hors périmètre v1 (rappel)
@@ -425,6 +464,7 @@ interface UserProgress {
 - Agent IA pédagogique (v2, section 11.1).
 - Application native Flutter (v2, section 11.2).
 - Compte utilisateur / synchronisation Supabase (v2, section 11.3).
+- Formations payantes vidéo — paiement, gating et liste d'attente (v2, section 11.5) ; la page `/formations` "coming soon" est en revanche incluse en v1.5.
 - Publication sur les stores d'applications.
 - Monétisation.
 

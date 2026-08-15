@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
 import { Hearts } from "@/components/ui/hearts"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { TerritoryMap } from "@/components/territoire/map"
@@ -123,6 +124,32 @@ export default function HomePage() {
           <span className="h-px flex-1 bg-gradient-to-l from-ink/10 to-transparent" />
         </div>
         <TerritoryMap zones={zones} />
+      </div>
+
+      {/* Liens utiles */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mb-6">
+        <Link
+          href="/formations"
+          className="group rounded-xl border-2 border-dashed border-compass/30 bg-compass/5 p-4 transition-all duration-200 hover:border-compass/60 hover:bg-compass/10"
+        >
+          <p className="font-heading text-base font-bold text-marine group-hover:text-compass transition-colors">
+            🎓 Formations
+          </p>
+          <p className="mt-1 font-body text-xs text-ink/50">
+            Des vidéos animées par des devs, pour aller plus loin. Bientôt.
+          </p>
+        </Link>
+        <Link
+          href="/retour"
+          className="group rounded-xl border-2 border-dashed border-moss/30 bg-moss/5 p-4 transition-all duration-200 hover:border-moss/60 hover:bg-moss/10"
+        >
+          <p className="font-heading text-base font-bold text-marine group-hover:text-moss transition-colors">
+            💬 Faire un retour
+          </p>
+          <p className="mt-1 font-body text-xs text-ink/50">
+            Testeur ? Un bug, une idée, un avis — on t'écoute.
+          </p>
+        </Link>
       </div>
 
       <BottomNav />
