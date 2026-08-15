@@ -9,6 +9,18 @@ const defaultProgress = {
   hearts: 5,
   completedNotionIds: [],
   validatedPillarIds: [],
+  currentCombo: 0,
+  unlockedBadgeIds: [] as string[],
+  suppositionsSpotted: 0,
+  rescueCount: 0,
+  perfectExercises: 0,
+  lateNightSessions: 0,
+  earlySessions: 0,
+  emergencySuccess: 0,
+  masteredTerms: [] as { pillar: string; termId: string }[],
+  dailyChallengeCompleted: false,
+  dailyChallengeDate: "",
+  dailyChallengeProgress: 0,
 }
 
 let progressData = { ...defaultProgress }
@@ -46,9 +58,14 @@ describe("getLeague", () => {
     expect(getLeague(999)).toBe("Saphir")
   })
 
-  it('returns "Diamant" for xp >= 1000', () => {
+  it('returns "Diamant" for xp between 1000 and 1499', () => {
     expect(getLeague(1000)).toBe("Diamant")
-    expect(getLeague(5000)).toBe("Diamant")
+    expect(getLeague(1499)).toBe("Diamant")
+  })
+
+  it('returns "Légende" for xp >= 1500', () => {
+    expect(getLeague(1500)).toBe("Légende")
+    expect(getLeague(5000)).toBe("Légende")
   })
 })
 
@@ -81,9 +98,23 @@ describe("addExerciseXp and addNotionBonusXp", () => {
 
   it("addExerciseXp grants 10 XP", async () => {
     const { addExerciseXp } = await import("@/lib/gamification/engine")
-    const r = await addExerciseXp()
+    const r = await addExerciseXp(true)
     expect(r.xpGained).toBe(10)
     expect(r.xp).toBe(60)
+  })
+
+  it("addExerciseXp grants 0 XP when wrong", async () => {
+    const { addExerciseXp } = await import("@/lib/gamification/engine")
+    const r = await addExerciseXp(false)
+    expect(r.xpGained).toBe(0)
+    expect(r.xp).toBe(50)
+  })
+
+  it("addExerciseXp grants combo bonus from combo 3", async () => {
+    progressData.currentCombo = 3
+    const { addExerciseXp } = await import("@/lib/gamification/engine")
+    const r = await addExerciseXp(true, 3)
+    expect(r.xpGained).toBe(15)
   })
 
   it("addNotionBonusXp grants 25 XP", async () => {
@@ -101,15 +132,16 @@ describe("loseHeart", () => {
 
   it("decrements hearts", async () => {
     const { loseHeart } = await import("@/lib/gamification/engine")
-    const hearts = await loseHeart()
+    const { hearts } = await loseHeart()
     expect(hearts).toBe(4)
   })
 
-  it("does not go below 0", async () => {
+  it("does not go below 0 and reports empty", async () => {
     progressData.hearts = 0
     const { loseHeart } = await import("@/lib/gamification/engine")
-    const hearts = await loseHeart()
+    const { hearts, isEmpty } = await loseHeart()
     expect(hearts).toBe(0)
+    expect(isEmpty).toBe(true)
   })
 })
 
@@ -146,7 +178,7 @@ describe("updateStreak", () => {
     yesterday.setDate(yesterday.getDate() - 1)
     progressData.lastActiveDate = yesterday.toISOString()
     const { updateStreak } = await import("@/lib/gamification/engine")
-    const streak = await updateStreak()
+    const { streak } = await updateStreak()
     expect(streak).toBe(6)
   })
 
@@ -155,14 +187,75 @@ describe("updateStreak", () => {
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 3)
     progressData.lastActiveDate = twoDaysAgo.toISOString()
     const { updateStreak } = await import("@/lib/gamification/engine")
-    const streak = await updateStreak()
+    const { streak } = await updateStreak()
     expect(streak).toBe(1)
   })
 
   it("does not change streak if already active today", async () => {
     progressData.lastActiveDate = new Date().toISOString()
     const { updateStreak } = await import("@/lib/gamification/engine")
-    const streak = await updateStreak()
+    const { streak, isNew } = await updateStreak()
     expect(streak).toBe(5)
+    expect(isNew).toBe(false)
+  })
+})
+
+describe("Gamification enrichie", () => {
+  beforeEach(() => {
+    progressData = { ...defaultProgress }
+  })
+
+  it("updateCombo increments on correct and resets on wrong", async () => {
+    const { updateCombo } = await import("@/lib/gamification/engine")
+    await updateCombo(true)
+    await updateCombo(true)
+    const r = await updateCombo(true)
+    expect(r.combo).toBe(3)
+    expect(r.heartGained).toBe(false)
+    const reset = await updateCombo(false)
+    expect(reset.combo).toBe(0)
+  })
+
+  it("updateCombo grants a heart at combo 10", async () => {
+    progressData.currentCombo = 9
+    progressData.hearts = 3
+    const { updateCombo } = await import("@/lib/gamification/engine")
+    const r = await updateCombo(true)
+    expect(r.combo).toBe(10)
+    expect(r.heartGained).toBe(true)
+    expect(progressData.hearts).toBe(4)
+  })
+
+  it("checkBadges unlocks badges when conditions are met", async () => {
+    progressData.streakDays = 7
+    progressData.emergencySuccess = 3
+    const { checkBadges } = await import("@/lib/gamification/engine")
+    const newBadges = await checkBadges()
+    expect(newBadges.map((b) => b.id)).toEqual(expect.arrayContaining(["unstoppable", "emergency_responder"]))
+    expect(progressData.unlockedBadgeIds).toContain("unstoppable")
+  })
+
+  it("checkBadges does not re-unlock already unlocked badges", async () => {
+    progressData.streakDays = 7
+    progressData.unlockedBadgeIds = ["unstoppable"]
+    const { checkBadges } = await import("@/lib/gamification/engine")
+    const newBadges = await checkBadges()
+    expect(newBadges.map((b) => b.id)).not.toContain("unstoppable")
+  })
+
+  it("getMasteryStage returns the 4 stages correctly", () => {
+    const { getMasteryStage } = require("@/lib/gamification/engine")
+    expect(getMasteryStage({ masteryLevel: "decouvert" })).toBe("graine")
+    expect(getMasteryStage({ masteryLevel: "en_cours", cumulativeExercisesPassed: false })).toBe("pousse")
+    expect(getMasteryStage({ masteryLevel: "en_cours", cumulativeExercisesPassed: true })).toBe("arbre")
+    expect(getMasteryStage({ masteryLevel: "maitrise" })).toBe("etoile")
+  })
+
+  it("all badges have a valid condition", () => {
+    const { BADGES } = require("@/lib/gamification/engine")
+    BADGES.forEach((badge: any) => {
+      expect(typeof badge.condition).toBe("function")
+      expect(badge.condition({})).toBeTypeOf("boolean")
+    })
   })
 })

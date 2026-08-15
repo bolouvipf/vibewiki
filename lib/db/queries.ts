@@ -81,10 +81,40 @@ export async function getProgress() {
       hearts: 5,
       completedNotionIds: [],
       validatedPillarIds: [],
+      currentCombo: 0,
+      unlockedBadgeIds: [],
+      suppositionsSpotted: 0,
+      rescueCount: 0,
+      perfectExercises: 0,
+      lateNightSessions: 0,
+      earlySessions: 0,
+      emergencySuccess: 0,
+      masteredTerms: [],
+      dailyChallengeCompleted: false,
+      dailyChallengeDate: "",
+      dailyChallengeProgress: 0,
     } as UserProgress
     await db.progress.add(p)
   }
   return p
+}
+
+export async function migrateProgress() {
+  const p = await getProgress()
+  const updates: Partial<UserProgress> = {}
+  if (p.currentCombo === undefined) updates.currentCombo = 0
+  if (p.unlockedBadgeIds === undefined) updates.unlockedBadgeIds = []
+  if (p.suppositionsSpotted === undefined) updates.suppositionsSpotted = 0
+  if (p.rescueCount === undefined) updates.rescueCount = 0
+  if (p.perfectExercises === undefined) updates.perfectExercises = 0
+  if (p.lateNightSessions === undefined) updates.lateNightSessions = 0
+  if (p.earlySessions === undefined) updates.earlySessions = 0
+  if (p.emergencySuccess === undefined) updates.emergencySuccess = 0
+  if (p.masteredTerms === undefined) updates.masteredTerms = []
+  if (p.dailyChallengeCompleted === undefined) updates.dailyChallengeCompleted = false
+  if (p.dailyChallengeDate === undefined) updates.dailyChallengeDate = ""
+  if (p.dailyChallengeProgress === undefined) updates.dailyChallengeProgress = 0
+  if (Object.keys(updates).length > 0) await updateProgress(updates)
 }
 
 export async function updateProgress(update: Partial<UserProgress>) {

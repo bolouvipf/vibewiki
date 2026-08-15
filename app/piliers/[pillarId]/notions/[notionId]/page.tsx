@@ -22,12 +22,22 @@ import {
   validateRemiseEnOrdre,
   validateQuestionVerification,
 } from "@/lib/exercises/validators"
-import { getProgress, addTerm, completeNotion, isNotionCompleted } from "@/lib/db/queries"
-import { addExerciseXp, addNotionBonusXp, loseHeart, updateStreak, getGamificationState } from "@/lib/gamification/engine"
+import { getProgress, addTerm, completeNotion, isNotionCompleted, updateProgress } from "@/lib/db/queries"
+import {
+  addExerciseXp,
+  addNotionBonusXp,
+  checkBadges,
+  loseHeart,
+  trackSessionTimes,
+  updateCombo,
+  updateStreak,
+  getGamificationState,
+} from "@/lib/gamification/engine"
 import pillar1 from "@/content/piliers/01-transversal.json"
 import pillar2 from "@/content/piliers/02-front.json"
 import pillar3 from "@/content/piliers/03-back.json"
 import pillar4 from "@/content/piliers/04-database.json"
+import fiches from "@/content/ressources/fiches-reference.json"
 
 const pillars = [pillar1, pillar2, pillar3, pillar4]
 
@@ -47,6 +57,15 @@ export default function NotionPage() {
   const pillar = pillars.find((p) => p.pillarId === pillarId)
   const notion = pillar?.notions.find((n) => n.id === notionId)
 
+  const matchingFiche = fiches.fiches.find((f) => {
+    const ficheWords = new Set(
+      f.term.toLowerCase().replace(/[^a-z\u00e0-\u00ff\s]/g, "").split(/\s+/).filter(Boolean),
+    )
+    const notionWords =
+      notion?.term.toLowerCase().replace(/[^a-z\u00e0-\u00ff\s]/g, "").split(/\s+/).filter(Boolean) ?? []
+    return notionWords.some((w) => w.length > 2 && ficheWords.has(w))
+  })
+
   const [currentEx, setCurrentEx] = useState(0)
   const [hearts, setHearts] = useState(5)
   const [xp, setXp] = useState(0)
@@ -55,6 +74,8 @@ export default function NotionPage() {
   const [alreadyDone, setAlreadyDone] = useState(false)
   const [discoveredTerms, setDiscoveredTerms] = useState<Set<string>>(new Set())
   const [showCourse, setShowCourse] = useState(true)
+  const [lastHeartLost, setLastHeartLost] = useState(false)
+  const [sessionTracked, setSessionTracked] = useState(false)
 
   const colors = pillarAccents[pillarId]
 
@@ -72,20 +93,38 @@ export default function NotionPage() {
       setAnswers((prev) => [...prev, result.correct])
 
       if (result.correct) {
-        const r = await addExerciseXp()
+        const comboResult = await updateCombo(true)
+        const r = await addExerciseXp(true, comboResult.combo)
         setXp(r.xp)
+
+        if (notion.exercises[currentEx]?.type === "reperage_supposition") {
+          const p = await getProgress()
+          await updateProgress({ suppositionsSpotted: (p.suppositionsSpotted || 0) + 1 })
+        }
+        if (lastHeartLost) {
+          setLastHeartLost(false)
+          const p = await getProgress()
+          await updateProgress({ rescueCount: (p.rescueCount || 0) + 1 })
+        }
+        if (!sessionTracked) {
+          setSessionTracked(true)
+          await trackSessionTimes()
+        }
       } else {
+        await updateCombo(false)
         const h = await loseHeart()
-        setHearts(h)
+        setHearts(h.hearts)
+        if (h.isEmpty) setLastHeartLost(true)
       }
 
       if (currentEx < notion.exercises.length - 1) {
         setCurrentEx((prev) => prev + 1)
       } else {
         const correctCount = [...answers, result.correct].filter(Boolean).length
+        const wasPerfect = correctCount === notion.exercises.length
 
         if (correctCount >= Math.ceil(notion.exercises.length / 2)) {
-          await addNotionBonusXp()
+          await addNotionBonusXp(wasPerfect)
           const relatedTerms = notion.exercises.flatMap((ex) => ex.relatedTermIds)
           await completeNotion(notionId, relatedTerms)
 
@@ -102,15 +141,20 @@ export default function NotionPage() {
             })
           }
         }
+        if (wasPerfect) {
+          const p = await getProgress()
+          await updateProgress({ perfectExercises: (p.perfectExercises || 0) + 1 })
+        }
 
         await updateStreak()
+        await checkBadges()
         const finalState = await getGamificationState()
         setXp(finalState.xp)
         setHearts(finalState.hearts)
         setFinished(true)
       }
     },
-    [currentEx, notion, notionId, answers, pillarId, pillar],
+    [currentEx, notion, notionId, answers, pillarId, pillar, lastHeartLost, sessionTracked],
   )
 
   if (!pillar || !notion) {
@@ -240,6 +284,34 @@ export default function NotionPage() {
               Commencer les exercices
             </Button>
           </Card>
+
+          {matchingFiche && (
+            <Card className="mb-6 overflow-hidden">
+              <div className={`-mx-6 -mt-6 mb-5 px-6 pt-5 pb-4 ${pillarAccentLight}`}>
+                <p className="font-heading text-lg font-bold text-marine mt-1">📋 Fiche de référence</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-body text-xs font-semibold uppercase tracking-wider text-ink/40 mb-1.5">Analogie</p>
+                <p className="font-body text-sm leading-relaxed text-ink/80">{matchingFiche.analogie}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-body text-xs font-semibold uppercase tracking-wider text-ink/40 mb-1.5">Où ça vit</p>
+                <p className="font-body text-sm leading-relaxed text-ink/80">{matchingFiche.ou_ca_vit}</p>
+              </div>
+              <div className="mb-4 rounded-lg bg-alert/5 p-4">
+                <p className="font-body text-xs font-semibold uppercase tracking-wider text-alert mb-1.5">Red flag IA</p>
+                <p className="font-body text-sm leading-relaxed text-ink/70">{matchingFiche.red_flag_ia}</p>
+              </div>
+              <div className="mb-4 rounded-lg bg-compass/5 p-4">
+                <p className="font-body text-xs font-semibold uppercase tracking-wider text-compass mb-1.5">Prompt de vérification</p>
+                <p className="font-body text-sm leading-relaxed italic text-ink/70">&ldquo;{matchingFiche.prompt_verification}&rdquo;</p>
+              </div>
+              <div>
+                <p className="font-body text-xs font-semibold uppercase tracking-wider text-ink/40 mb-1.5">Question clé</p>
+                <p className="font-body text-sm leading-relaxed text-ink/80">{matchingFiche.question_cle}</p>
+              </div>
+            </Card>
+          )}
         </div>
       ) : (
         <div className="animate-scale-in" key={currentEx}>

@@ -20,8 +20,17 @@ import {
   validateRemiseEnOrdre,
   validateQuestionVerification,
 } from "@/lib/exercises/validators"
-import { isPillarValidated, validatePillar } from "@/lib/db/queries"
-import { addExerciseXp, addNotionBonusXp, loseHeart, updateStreak, getGamificationState } from "@/lib/gamification/engine"
+import { getProgress, isPillarValidated, updateProgress, validatePillar } from "@/lib/db/queries"
+import {
+  addExerciseXp,
+  addNotionBonusXp,
+  checkBadges,
+  loseHeart,
+  trackSessionTimes,
+  updateCombo,
+  updateStreak,
+  getGamificationState,
+} from "@/lib/gamification/engine"
 import pillar1 from "@/content/piliers/01-transversal.json"
 import pillar2 from "@/content/piliers/02-front.json"
 import pillar3 from "@/content/piliers/03-back.json"
@@ -47,6 +56,8 @@ export default function ValidationPage() {
   const [finished, setFinished] = useState(false)
   const [answers, setAnswers] = useState<boolean[]>([])
   const [alreadyValidated, setAlreadyValidated] = useState(false)
+  const [lastHeartLost, setLastHeartLost] = useState(false)
+  const [sessionTracked, setSessionTracked] = useState(false)
 
   useEffect(() => {
     getGamificationState().then((s) => setHearts(s.hearts))
@@ -60,31 +71,54 @@ export default function ValidationPage() {
       setAnswers((prev) => [...prev, result.correct])
 
       if (result.correct) {
-        const r = await addExerciseXp()
+        const comboResult = await updateCombo(true)
+        const r = await addExerciseXp(true, comboResult.combo)
         setXp(r.xp)
+
+        if (pillar.validationExercises[currentEx]?.type === "reperage_supposition") {
+          const p = await getProgress()
+          await updateProgress({ suppositionsSpotted: (p.suppositionsSpotted || 0) + 1 })
+        }
+        if (lastHeartLost) {
+          setLastHeartLost(false)
+          const p = await getProgress()
+          await updateProgress({ rescueCount: (p.rescueCount || 0) + 1 })
+        }
+        if (!sessionTracked) {
+          setSessionTracked(true)
+          await trackSessionTimes()
+        }
       } else {
+        await updateCombo(false)
         const h = await loseHeart()
-        setHearts(h)
+        setHearts(h.hearts)
+        if (h.isEmpty) setLastHeartLost(true)
       }
 
       if (currentEx < pillar.validationExercises.length - 1) {
         setCurrentEx((prev) => prev + 1)
       } else {
         const correctCount = [...answers, result.correct].filter(Boolean).length
+        const wasPerfect = correctCount === pillar.validationExercises.length
 
         if (correctCount >= Math.ceil(pillar.validationExercises.length / 2)) {
-          await addNotionBonusXp()
+          await addNotionBonusXp(wasPerfect)
           await validatePillar(pillarId)
+        }
+        if (wasPerfect) {
+          const p = await getProgress()
+          await updateProgress({ perfectExercises: (p.perfectExercises || 0) + 1 })
         }
 
         await updateStreak()
+        await checkBadges()
         const finalState = await getGamificationState()
         setXp(finalState.xp)
         setHearts(finalState.hearts)
         setFinished(true)
       }
     },
-    [currentEx, pillar, pillarId, answers],
+    [currentEx, pillar, pillarId, answers, lastHeartLost, sessionTracked],
   )
 
   if (!pillar) {

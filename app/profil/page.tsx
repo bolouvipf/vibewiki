@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Hearts } from "@/components/ui/hearts"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { getGamificationState } from "@/lib/gamification/engine"
 import { getDueReviews } from "@/lib/db/queries"
+import { BadgeGrid } from "@/components/profil/BadgeGrid"
 
 const LEAGUES = [
   { name: "Bronze", minXp: 0, color: "text-amber-700", bar: "bg-amber-600", icon: "\uD83E\uDD47" },
@@ -32,9 +34,7 @@ function leagueProgress(xp: number) {
 }
 
 export default function ProfilPage() {
-  const [state, setState] = useState<{
-    xp: number; streakDays: number; hearts: number; league: string; completedNotions: number
-  } | null>(null)
+  const [state, setState] = useState<Awaited<ReturnType<typeof getGamificationState>> | null>(null)
   const [dueCount, setDueCount] = useState(0)
 
   useEffect(() => {
@@ -152,6 +152,36 @@ export default function ProfilPage() {
             </div>
           )
         })}
+      </div>
+
+      {/* Mode Urgence */}
+      <Link href="/urgence" className="block mb-6">
+        <div className="rounded-2xl border-2 border-alert/20 bg-alert/5 p-4 transition-all duration-200 hover:border-alert/40 hover:shadow-md">
+          <p className="font-heading text-sm font-bold text-alert">🚨 Mode Urgence</p>
+          <p className="font-body text-xs text-ink/50 mt-1">
+            Votre site est en panne ? Entraînez-vous à réagir face aux crises.
+          </p>
+        </div>
+      </Link>
+
+      {/* Combo du jour */}
+      {state.currentCombo > 0 && (
+        <div className="mb-6 rounded-2xl bg-gradient-to-r from-compass/10 to-moss/10 border border-compass/20 p-4">
+          <p className="font-heading text-sm font-bold text-marine">
+            🔥 Combo actuel : x{state.currentCombo}
+          </p>
+          <p className="font-body text-xs text-ink/50 mt-1">
+            Enchaînez 10 bonnes réponses pour gagner un cœur bonus.
+          </p>
+        </div>
+      )}
+
+      {/* Badges */}
+      <h2 className="font-heading text-sm font-semibold text-ink/60 mb-3 uppercase tracking-wider">
+        Badges {state.badges.length > 0 && <span className="text-compass">· {state.badges.length}/{10}</span>}
+      </h2>
+      <div className="mb-8">
+        <BadgeGrid unlockedIds={state.badges} />
       </div>
 
       <BottomNav />

@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react"
 import { Hearts } from "@/components/ui/hearts"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { TerritoryMap } from "@/components/territoire/map"
-import { getGamificationState } from "@/lib/gamification/engine"
-import { getProgress, isPillarValidated } from "@/lib/db/queries"
+import { getGamificationState, type DailyChallenge } from "@/lib/gamification/engine"
+import { getProgress, isPillarValidated, migrateProgress } from "@/lib/db/queries"
 import pillar1 from "@/content/piliers/01-transversal.json"
 import pillar2 from "@/content/piliers/02-front.json"
 import pillar3 from "@/content/piliers/03-back.json"
@@ -15,12 +15,19 @@ const pillars = [pillar1, pillar2, pillar3, pillar4]
 
 export default function HomePage() {
   const [state, setState] = useState({ xp: 0, streakDays: 0, hearts: 5, league: "", completedNotions: 0 })
+  const [dailyChallenge, setDailyChallenge] = useState<DailyChallenge | null>(null)
   const [completedIds, setCompletedIds] = useState<readonly string[]>([])
   const [validatedPillars, setValidatedPillars] = useState<readonly string[]>([])
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    getGamificationState().then(setState).catch((e) => setError(String(e)))
+    migrateProgress()
+    getGamificationState()
+      .then((s) => {
+        setState({ xp: s.xp, streakDays: s.streakDays, hearts: s.hearts, league: s.league, completedNotions: s.completedNotions })
+        setDailyChallenge(s.dailyChallenge)
+      })
+      .catch((e) => setError(String(e)))
     getProgress().then((p) => setCompletedIds(p.completedNotionIds)).catch((e) => setError(String(e)))
     Promise.all(pillars.map((p) => isPillarValidated(p.pillarId).then((v) => v ? p.pillarId : null)))
       .then((results) => setValidatedPillars(results.filter(Boolean) as string[]))
@@ -95,6 +102,18 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Défi du jour */}
+      {dailyChallenge && (
+        <div className="mb-6 rounded-xl border-2 border-[#D9A441] bg-white p-4 animate-slide-up">
+          <div className="text-xs font-bold uppercase tracking-wider text-[#D9A441]">
+            🔥 Défi du jour
+          </div>
+          <div className="mt-1 font-heading text-lg font-bold text-marine">{dailyChallenge.title}</div>
+          <p className="font-body text-sm text-ink/50">{dailyChallenge.description}</p>
+          <p className="mt-1 font-body text-xs font-semibold text-moss">Récompense : +{dailyChallenge.reward} XP</p>
+        </div>
+      )}
 
       {/* Carte du territoire */}
       <div className="mb-6">

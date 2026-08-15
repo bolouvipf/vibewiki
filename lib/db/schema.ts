@@ -14,6 +14,7 @@ export interface Term {
   nextReviewAt?: string
   lastReviewAt?: string
   currentReviewInterval?: number
+  cumulativeExercisesPassed?: boolean
 }
 
 export interface UserProgress {
@@ -25,6 +26,20 @@ export interface UserProgress {
   league?: string
   completedNotionIds: string[]
   validatedPillarIds: string[]
+  // NOUVEAU : Gamification enrichie
+  currentCombo: number
+  unlockedBadgeIds: string[]
+  suppositionsSpotted: number
+  rescueCount: number
+  perfectExercises: number
+  lateNightSessions: number
+  earlySessions: number
+  emergencySuccess: number
+  masteredTerms: { pillar: string; termId: string }[]
+  // NOUVEAU : Défi du jour
+  dailyChallengeCompleted: boolean
+  dailyChallengeDate: string
+  dailyChallengeProgress: number
 }
 
 export interface CachedNotion {

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "description": "Fiches de référence visuelles et aide-mémoire pour chaque pilier",
+    "format": "Une fiche par notion clé, avec analogie, red flag et prompt de vérification"
+  },
+  "fiches": [
+    {
+      "pillar": "transversal",
+      "term": "Commit",
+      "analogie": "C'est comme sauvegarder un document Word sous un nouveau nom explicite ('Rapport_v2_final_CORRIGE') au lieu d'écraser l'original.",
+      "ou_ca_vit": "Dans l'historique Git de votre projet, localement puis sur GitHub après le push.",
+      "red_flag_ia": "L'IA dit 'faites un commit' sans préciser le message. Un message vague comme 'update' ou 'fix' est inutile pour l'historique.",
+      "prompt_verification": "Peux-tu me proposer un message de commit clair et descriptif qui explique POURQUOI cette modification est nécessaire ?",
+      "question_cle": "Quels fichiers exactement sont inclus dans ce commit ?"
+    },
+    {
+      "pillar": "transversal",
+      "term": "Variables d'environnement",
+      "analogie": "C'est comme les codes d'accès de votre immeuble : vous les utilisez tous les jours, mais vous ne les écrivez pas sur la porte d'entrée.",
+      "ou_ca_vit": "Dans l'interface de votre hébergeur (Vercel, Railway, etc.) ou dans un fichier .env local jamais poussé sur GitHub.",
+      "red_flag_ia": "L'IA propose d'écrire une clé API directement dans le code source ou de la partager dans la conversation.",
+      "prompt_verification": "Cette clé API est-elle bien stockée dans une variable d'environnement et absente du code source ? Montre-moi où elle est configurée.",
+      "question_cle": "Cette variable est-elle définie dans tous les environnements (dev, staging, prod) ?"
+    },
+    {
+      "pillar": "front",
+      "term": "Props / State",
+      "analogie": "Les props sont comme les ingrédients d'une recette (données en entrée). Le state est comme la température du four (donnée qui change pendant la cuisson).",
+      "ou_ca_vit": "Dans les composants React. Les props descendent du parent vers l'enfant. Le state reste local au composant.",
+      "red_flag_ia": "L'IA modifie une prop directement comme si c'était une variable locale, ou crée un state dans chaque composant au lieu de le remonter.",
+      "prompt_verification": "Cette donnée doit-elle être gérée localement (state) ou transmise par le parent (props) ? Quelle est la source de vérité ?",
+      "question_cle": "Si ce composant est utilisé à 3 endroits différents, chacun aura-t-il ses propres données ou partageront-ils le même state ?"
+    },
+    {
+      "pillar": "front",
+      "term": "Hydratation",
+      "analogie": "C'est comme recevoir un meuble en kit (HTML statique) puis assembler les tiroirs et les poignées (JavaScript interactif) une fois livré.",
+      "ou_ca_vit": "Dans le navigateur, au chargement de la page. Le serveur envoie du HTML, puis le navigateur 'réveille' le JavaScript.",
+      "red_flag_ia": "L'IA dit 'le site fonctionne' sans vérifier que l'hydratation s'est bien passée. Un bouton visible mais non cliquable = échec d'hydratation.",
+      "prompt_verification": "Cette page utilise-t-elle le rendu côté serveur (SSR) ? Si oui, l'hydratation est-elle correcte ? Y a-t-il des erreurs dans la console navigateur ?",
+      "question_cle": "Le contenu affiché au chargement est-il identique entre le HTML initial et le rendu React ?"
+    },
+    {
+      "pillar": "back",
+      "term": "Endpoint / API",
+      "analogie": "C'est comme le guichet d'une banque : vous ne rentrez pas dans le coffre, vous faites une demande précise à un employé qui va chercher l'information.",
+      "ou_ca_vit": "Sur le serveur. Chaque endpoint est une URL spécifique (ex: /api/users) qui répond à une méthode HTTP (GET, POST, etc.).",
+      "red_flag_ia": "L'IA crée un endpoint qui renvoie TOUTES les données sans filtrage, ou expose des informations sensibles.",
+      "prompt_verification": "Cet endpoint vérifie-t-il l'identité de l'utilisateur avant de renvoyer les données ? Quels champs exacts sont renvoyés ?",
+      "question_cle": "Quel est le comportement si 1000 utilisateurs appellent cet endpoint en même temps ?"
+    },
+    {
+      "pillar": "back",
+      "term": "Middleware",
+      "analogie": "C'est comme le vigile d'un immeuble : il contrôle qui entre, vérifie les badges, et peut refuser l'accès avant même que vous ne frappiez à la porte.",
+      "ou_ca_vit": "Entre la requête entrante et le endpoint final. Il intercepte, modifie ou bloque la requête.",
+      "red_flag_ia": "L'IA ajoute un middleware mais ne teste pas le cas où il bloque une requête légitime (faux positif).",
+      "prompt_verification": "Ce middleware est-il appliqué à TOUS les endpoints ou seulement à certains ? Peux-tu me montrer un cas où il bloque une requête non autorisée ET un cas où il laisse passer une requête légitime ?",
+      "question_cle": "Dans quel ordre les middlewares s'exécutent-ils ?"
+    },
+    {
+      "pillar": "database",
+      "term": "Schéma / Migration",
+      "analogie": "Le schéma c'est le plan architectural de votre maison. La migration, c'est le permis de construire : elle formalise le changement et permet de revenir en arrière.",
+      "ou_ca_vit": "Dans le code du projet (fichiers de migration) et dans la base de données elle-même (structure des tables).",
+      "red_flag_ia": "L'IA modifie directement la structure de la base de données en production sans migration, ou crée une migration sans rollback.",
+      "prompt_verification": "Cette modification du schéma a-t-elle une migration associée ? Peux-tu me montrer comment annuler cette migration si quelque chose tourne mal ?",
+      "question_cle": "Les données existantes seront-elles préservées lors de cette migration ?"
+    },
+    {
+      "pillar": "database",
+      "term": "NULL",
+      "analogie": "C'est comme une case vide dans un formulaire : ce n'est pas un zéro, ce n'est pas un texte vide — c'est l'absence totale de valeur.",
+      "ou_ca_vit": "Dans les cellules d'une table SQL. Une colonne peut autoriser ou interdire NULL (contrainte NOT NULL).",
+      "red_flag_ia": "L'IA dit 'il y a un problème de NULL' sans dire dans quelle table, quelle colonne, ni quelle requête le provoque.",
+      "prompt_verification": "Dans quelle table et quelle colonne exactement ce NULL apparaît-il ? Montre-moi la requête SQL qui le produit et la ligne concernée.",
+      "question_cle": "Cette colonne devrait-elle autoriser NULL ou faut-il ajouter une contrainte NOT NULL ?"
+    }
+  ]
+}

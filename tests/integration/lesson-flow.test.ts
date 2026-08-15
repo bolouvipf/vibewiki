@@ -96,7 +96,7 @@ describe("lesson flow: answer exercises, earn XP, complete lesson", () => {
     expect(result.correct).toBe(true)
 
     const { addExerciseXp, getGamificationState } = await import("@/lib/gamification/engine")
-    const xpResult = await addExerciseXp()
+    const xpResult = await addExerciseXp(true)
     expect(xpResult.xpGained).toBe(10)
 
     const state = await getGamificationState()
@@ -128,7 +128,7 @@ describe("lesson flow: answer exercises, earn XP, complete lesson", () => {
 
     for (let i = 0; i < correctCount; i++) {
       const { addExerciseXp } = await import("@/lib/gamification/engine")
-      await addExerciseXp()
+      await addExerciseXp(true)
     }
 
     const { addNotionBonusXp, getGamificationState } = await import("@/lib/gamification/engine")

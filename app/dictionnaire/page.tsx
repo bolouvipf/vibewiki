@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { getAllTerms, searchTerms } from "@/lib/db/queries"
+import { getMasteryEmoji, getMasteryStage } from "@/lib/gamification/engine"
 import type { Term } from "@/lib/db/schema"
 
 const PILLARS: { label: string; value: Term["pillar"] | null }[] = [
@@ -117,7 +118,10 @@ export default function DictionnairePage() {
             <Card className="cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-mono text-sm font-medium text-marine truncate">{term.term}</h3>
+                  <h3 className="font-mono text-sm font-medium text-marine truncate">
+                    <span className="mr-2 text-base">{getMasteryEmoji(getMasteryStage(term))}</span>
+                    {term.term}
+                  </h3>
                   <p className="mt-1 font-body text-xs text-ink/50 leading-relaxed line-clamp-2">
                     {term.shortDefinition}
                   </p>

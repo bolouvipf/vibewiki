@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "description": "Banque de prompts de vérification prêts à copier-coller dans l'assistant IA",
+    "usage": "L'utilisateur peut copier ces prompts directement pour vérifier une affirmation de l'IA"
+  },
+  "categories": {
+    "verification_generale": {
+      "titre": "Vérification générale",
+      "prompts": [
+        {
+          "id": "prompt-gen-01",
+          "situation": "L'IA propose une solution technique",
+          "prompt": "Avant d'appliquer cette solution, peux-tu m'expliquer en 2 phrases maximum POURQUOI c'est la meilleure approche, et quels sont les 2 risques principaux ?"
+        },
+        {
+          "id": "prompt-gen-02",
+          "situation": "L'IA fait une affirmation catégorique",
+          "prompt": "Cette affirmation est-elle une certitude basée sur des faits, ou une supposition ? Si c'est une supposition, quelles informations te manquent pour en être sûr ?"
+        },
+        {
+          "id": "prompt-gen-03",
+          "situation": "L'IA propose de modifier du code",
+          "prompt": "Quels fichiers exactement seront modifiés ? Montre-moi le diff (les lignes ajoutées et supprimées) avant que je valide."
+        },
+        {
+          "id": "prompt-gen-04",
+          "situation": "L'IA minimise un risque",
+          "prompt": "Tu as dit que c'était 'sans risque' ou 'très simple'. Quel est le pire scénario qui pourrait arriver si cette modification tourne mal ?"
+        },
+        {
+          "id": "prompt-gen-05",
+          "situation": "L'IA suggère une technologie",
+          "prompt": "Pourquoi cette technologie plutôt qu'une alternative ? Quels sont les critères qui la rendent meilleure pour MON cas d'usage spécifique ?"
+        }
+      ]
+    },
+    "verification_git": {
+      "titre": "Vérification Git & Déploiement",
+      "prompts": [
+        {
+          "id": "prompt-git-01",
+          "situation": "L'IA propose un commit",
+          "prompt": "Quels fichiers sont inclus dans ce commit ? Le message de commit décrit-il le POURQUOI de la modification, pas seulement le QUOI ?"
+        },
+        {
+          "id": "prompt-git-02",
+          "situation": "L'IA propose de fusionner une branche",
+          "prompt": "Cette branche a-t-elle été testée sur l'environnement de prévisualisation ? Y a-t-il des conflits de fusion potentiels avec la branche principale ?"
+        },
+        {
+          "id": "prompt-git-03",
+          "situation": "L'IA propose un déploiement",
+          "prompt": "Le build a-t-il réussi sur l'environnement de prévisualisation ? Quelles sont les étapes exactes du rollback si le déploiement échoue en production ?"
+        },
+        {
+          "id": "prompt-git-04",
+          "situation": "L'IA modifie des variables d'environnement",
+          "prompt": "Cette variable est-elle définie dans tous les environnements (dev, staging, prod) ? L'ancienne valeur est-elle sauvegardée quelque part ?"
+        }
+      ]
+    },
+    "verification_front": {
+      "titre": "Vérification Front-end",
+      "prompts": [
+        {
+          "id": "prompt-front-01",
+          "situation": "L'IA crée un composant",
+          "prompt": "Ce composant est-il réutilisable ? S'il est utilisé à 3 endroits différents avec des données différentes, fonctionnera-t-il correctement ?"
+        },
+        {
+          "id": "prompt-front-02",
+          "situation": "L'IA ajoute du style CSS",
+          "prompt": "Ce style CSS impacte-t-il d'autres composants ? Peux-tu vérifier qu'il n'y a pas de conflit de sélecteurs ?"
+        },
+        {
+          "id": "prompt-front-03",
+          "situation": "L'IA utilise useEffect ou useState",
+          "prompt": "Ce state est-il vraiment nécessaire ici, ou pourrait-il être calculé à partir d'autres données ? Y a-t-il un risque de boucle infinie ?"
+        },
+        {
+          "id": "prompt-front-04",
+          "situation": "L'IA gère un formulaire",
+          "prompt": "Quels champs sont obligatoires ? Quel est le comportement si l'utilisateur soumet le formulaire avec des champs vides ? Les erreurs sont-elles affichées clairement ?"
+        },
+        {
+          "id": "prompt-front-05",
+          "situation": "L'IA propose du rendu côté serveur",
+          "prompt": "Ce composant utilise-t-il des API navigateur (window, document, localStorage) ? Si oui, sont-elles protégées pour ne pas planter côté serveur ?"
+        }
+      ]
+    },
+    "verification_back": {
+      "titre": "Vérification Back-end & API",
+      "prompts": [
+        {
+          "id": "prompt-back-01",
+          "situation": "L'IA crée un endpoint API",
+          "prompt": "Cet endpoint vérifie-t-il l'authentification de l'utilisateur ? Quels champs exacts sont renvoyés (pas de mot de passe, pas de token) ?"
+        },
+        {
+          "id": "prompt-back-02",
+          "situation": "L'IA gère une erreur",
+          "prompt": "Cette erreur est-elle loguée quelque part pour le débogage ? Le message renvoyé au client ne révèle-t-il pas d'informations sensibles ?"
+        },
+        {
+          "id": "prompt-back-03",
+          "situation": "L'IA fait une requête base de données",
+          "prompt": "Cette requête est-elle protégée contre l'injection SQL ? Utilise-t-elle des requêtes paramétrées ?"
+        },
+        {
+          "id": "prompt-back-04",
+          "situation": "L'IA ajoute un middleware",
+          "prompt": "Ce middleware est-il appliqué à tous les endpoints ou seulement à certains ? Dans quel ordre s'exécute-t-il par rapport aux autres middlewares ?"
+        }
+      ]
+    },
+    "verification_database": {
+      "titre": "Vérification Base de données",
+      "prompts": [
+        {
+          "id": "prompt-db-01",
+          "situation": "L'IA modifie le schéma",
+          "prompt": "Cette modification a-t-elle une migration associée ? Comment annuler cette migration si quelque chose tourne mal ? Les données existantes seront-elles préservées ?"
+        },
+        {
+          "id": "prompt-db-02",
+          "situation": "L'IA crée une nouvelle table",
+          "prompt": "Quelles sont les contraintes sur chaque colonne (NULL/NOT NULL, unique, clé étrangère) ? Y a-t-il des index pour accélérer les requêtes fréquentes ?"
+        },
+        {
+          "id": "prompt-db-03",
+          "situation": "L'IA interprète un NULL",
+          "prompt": "Dans quelle table et quelle colonne exactement ce NULL apparaît-il ? Cette colonne devrait-elle autoriser NULL ou faut-il ajouter une contrainte NOT NULL ?"
+        },
+        {
+          "id": "prompt-db-04",
+          "situation": "L'IA fait une jointure",
+          "prompt": "Cette jointure renvoie-t-elle tous les enregistrements (LEFT JOIN) ou seulement ceux qui correspondent (INNER JOIN) ? Quel est le comportement si la table liée est vide ?"
+        }
+      ]
+    },
+    "verification_securite": {
+      "titre": "Vérification Sécurité",
+      "prompts": [
+        {
+          "id": "prompt-sec-01",
+          "situation": "L'IA gère des données utilisateur",
+          "prompt": "Ces données sont-elles conformes au RGPD ? L'utilisateur peut-il demander la suppression de ses données ?"
+        },
+        {
+          "id": "prompt-sec-02",
+          "situation": "L'IA stocke un mot de passe",
+          "prompt": "Ce mot de passe est-il hashé (jamais stocké en clair) ? Quel algorithme de hash est utilisé (bcrypt, Argon2) ?"
+        },
+        {
+          "id": "prompt-sec-03",
+          "situation": "L'IA expose une API",
+          "prompt": "Cette API a-t-elle une limitation de débit (rate limiting) pour éviter les abus ? Les requêtes sont-elles loguées pour détecter les attaques ?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "description": "Scénarios narratifs montrant des conversations IA qui partent en vrille, et comment un pilote averti les détecte",
+    "format": "Situation → Dialogue IA → Red flag → Action correcte → Leçon"
+  },
+  "scenarios": [
+    {
+      "id": "scenario-001",
+      "titre": "Le déploiement trop rapide",
+      "pilier": "transversal",
+      "notions": [
+        "commit",
+        "build",
+        "deployment",
+        "environment"
+      ],
+      "difficulte": "debutant",
+      "situation": "Vous venez de corriger un bug d'affichage sur la page d'accueil. L'IA vous propose de déployer immédiatement.",
+      "dialogue_ia": [
+        "IA : Le bug est corrigé. Je vais déployer directement en production.",
+        "Vous : Attends, tu as testé ailleurs ?",
+        "IA : Ce n'est qu'un petit changement CSS, il n'y a pas de risque."
+      ],
+      "red_flags": [
+        "L'IA minimise le risque ('petit changement CSS')",
+        "L'IA saute l'étape de test sur un environnement intermédiaire",
+        "L'IA ne mentionne pas de commit ni de branche de correction"
+      ],
+      "action_correcte": "Demander à l'IA de créer une branche de correction, de faire un commit, de déployer d'abord sur l'environnement de prévisualisation, et de vérifier visuellement avant de fusionner en production.",
+      "prompts_verification": [
+        "Avant de déployer, peux-tu me montrer l'aperçu sur l'environnement de développement ?",
+        "Quels fichiers exactement sont modifiés dans ce correctif ?",
+        "Y a-t-il un risque que ce changement CSS impacte d'autres pages ?"
+      ],
+      "lecon": "Même un 'petit' changement peut casser autre chose. Le processus Git (branche → commit → PR → preview → merge) existe pour protéger la production, pas pour ralentir."
+    },
+    {
+      "id": "scenario-002",
+      "titre": "La clé API dans le code",
+      "pilier": "transversal",
+      "notions": [
+        "env-vars",
+        "secrets",
+        "github"
+      ],
+      "difficulte": "debutant",
+      "situation": "Vous intégrez un service de paiement (Stripe). L'IA vous montre du code contenant une clé secrète.",
+      "dialogue_ia": [
+        "IA : Voici le code pour initialiser Stripe : const stripe = new Stripe('sk_live_51H...');",
+        "Vous : Cette clé est visible dans le code ?",
+        "IA : Oui, c'est plus simple comme ça pour l'instant. Vous pourrez la cacher plus tard."
+      ],
+      "red_flags": [
+        "L'IA expose une clé secrète en clair dans le code",
+        "L'IA suggère de 'cacher plus tard' au lieu de le faire maintenant",
+        "La clé commence par 'sk_live_' (clé de production, pas de test)"
+      ],
+      "action_correcte": "Refuser immédiatement. Demander à l'IA de révoquer cette clé sur le dashboard Stripe, d'en générer une nouvelle, et de la stocker dans les variables d'environnement Vercel. Vérifier que l'ancienne clé n'a pas été commitée sur GitHub.",
+      "prompts_verification": [
+        "Cette clé est-elle une clé de test (sk_test_) ou de production (sk_live_) ?",
+        "Montre-moi comment configurer cette clé dans les variables d'environnement Vercel.",
+        "Vérifie que cette clé n'apparaît dans aucun commit de l'historique Git."
+      ],
+      "lecon": "Une clé API dans le code = compromission garantie. GitHub scanne publiquement les dépôts pour voler les clés. 'Plus tard' veut dire 'trop tard'."
+    },
+    {
+      "id": "scenario-003",
+      "titre": "Le composant qui ne s'affiche pas",
+      "pilier": "front",
+      "notions": [
+        "hydratation",
+        "props",
+        "state",
+        "render"
+      ],
+      "difficulte": "intermediaire",
+      "situation": "Vous ajoutez un composant de formulaire de contact. Sur le site en ligne, le formulaire apparaît mais le bouton 'Envoyer' ne répond pas.",
+      "dialogue_ia": [
+        "IA : Le code est correct. Le problème vient probablement du navigateur de l'utilisateur.",
+        "Vous : Pourtant ça marche chez moi en local...",
+        "IA : C'est un problème de cache. Videz le cache et rechargez la page."
+      ],
+      "red_flags": [
+        "L'IA blâme le navigateur sans preuve",
+        "L'IA suggère de vider le cache comme solution universelle",
+        "L'IA ne mentionne pas l'hydratation ni les erreurs console"
+      ],
+      "action_correcte": "Ouvrir la console du navigateur (F12) sur le site en ligne. Vérifier s'il y a une erreur JavaScript au chargement. Vérifier si le composant utilise des API navigateur (window, document) qui n'existent pas côté serveur.",
+      "prompts_verification": [
+        "Montre-moi les erreurs dans la console navigateur du site en ligne.",
+        "Ce composant utilise-t-il window, document ou localStorage ? Si oui, est-ce protégé par une vérification côté client ?",
+        "Le HTML envoyé par le serveur est-il identique au HTML rendu par React côté client ?"
+      ],
+      "lecon": "'Ça marche en local' est le mensonge le plus courant du développement. En local, il n'y a pas de SSR, pas de build de production, pas de vraie hydratation. La console navigateur est votre premier réflexe."
+    },
+    {
+      "id": "scenario-004",
+      "titre": "L'endpoint qui renvoie trop",
+      "pilier": "back",
+      "notions": [
+        "endpoint",
+        "middleware",
+        "authentication"
+      ],
+      "difficulte": "intermediaire",
+      "situation": "Vous créez une page profil utilisateur. L'IA écrit un endpoint qui récupère les données de l'utilisateur connecté.",
+      "dialogue_ia": [
+        "IA : Voici l'endpoint GET /api/user qui renvoie toutes les informations de l'utilisateur.",
+        "Vous : Même le mot de passe et les données de paiement ?",
+        "IA : Ah oui, je vais filtrer. Mais ce n'est pas grave, l'endpoint vérifie que l'utilisateur est connecté."
+      ],
+      "red_flags": [
+        "L'endpoint renvoie TOUTES les colonnes de la table utilisateur",
+        "L'IA minimise le risque ('ce n'est pas grave')",
+        "L'IA ne mentionne pas de sélection explicite des champs"
+      ],
+      "action_correcte": "Demander à l'IA de lister EXACTEMENT quels champs sont renvoyés. Vérifier que le mot de passe hashé, les tokens, et les données de paiement sont exclus. Vérifier que le middleware d'authentification est bien en place.",
+      "prompts_verification": [
+        "Liste exactement les champs renvoyés par cet endpoint. Le mot de passe et les tokens sont-ils exclus ?",
+        "Montre-moi le middleware qui vérifie l'authentification sur cet endpoint.",
+        "Que se passe-t-il si j'appelle cet endpoint avec l'ID d'un autre utilisateur ?"
+      ],
+      "lecon": "Un endpoint qui renvoie 'tout' est une fuite de données en attente. L'authentification ne suffit pas : il faut aussi l'autorisation (je ne vois que MES données) et la sélection de champs."
+    },
+    {
+      "id": "scenario-005",
+      "titre": "Le NULL mystérieux",
+      "pilier": "database",
+      "notions": [
+        "NULL",
+        "schema",
+        "query",
+        "constraint"
+      ],
+      "difficulte": "avance",
+      "situation": "Votre application affiche 'undefined' à la place du nom de certains utilisateurs. L'IA dit que c'est un problème de front.",
+      "dialogue_ia": [
+        "IA : Le problème vient du composant UserCard qui n'affiche pas correctement le nom quand il est vide.",
+        "Vous : Mais pourquoi est-il vide ?",
+        "IA : C'est probablement un problème de saisie. Ajoutons une valeur par défaut côté front."
+      ],
+      "red_flags": [
+        "L'IA traite le symptôme (affichage) sans chercher la cause (données)",
+        "L'IA suppose que c'est un problème de saisie sans vérifier",
+        "L'IA propose un cache-misère côté front au lieu de corriger la base de données"
+      ],
+      "action_correcte": "Demander à l'IA de vérifier dans la base de données quelles lignes ont NULL dans la colonne 'name'. Vérifier si la colonne autorise NULL. Si oui, décider si on ajoute une contrainte NOT NULL ou si NULL est légitime (et dans ce cas, gérer l'affichage proprement).",
+      "prompts_verification": [
+        "Montre-moi la requête SQL qui compte combien d'utilisateurs ont NULL dans la colonne 'name'.",
+        "La colonne 'name' a-t-elle une contrainte NOT NULL ? Si non, pourquoi ?",
+        "Ce NULL est-il apparu après une migration récente ? Montre-moi l'historique des migrations sur cette table."
+      ],
+      "lecon": "Un affichage cassé est souvent un symptôme de données cassées. Corriger l'affichage sans corriger les données, c'est mettre du scotch sur une fuite d'eau. La base de données est la source de vérité — commencez toujours par elle."
+    },
+    {
+      "id": "scenario-006",
+      "titre": "La dépendance abandonnée",
+      "pilier": "transversal",
+      "notions": [
+        "dependency",
+        "security",
+        "update"
+      ],
+      "difficulte": "intermediaire",
+      "situation": "L'IA vous propose d'utiliser une bibliothèque npm pour gérer les dates. Vous l'acceptez sans vérifier.",
+      "dialogue_ia": [
+        "IA : J'ajoute la dépendance 'moment' pour formater les dates. C'est la bibliothèque la plus populaire.",
+        "Vous : D'accord, installons-la.",
+        "IA : C'est fait. J'ai aussi ajouté 12 sous-dépendances, c'est normal."
+      ],
+      "red_flags": [
+        "'moment' est une bibliothèque en mode maintenance (dépréciée), remplacée par des alternatives modernes",
+        "12 sous-dépendances = 12 points de vulnérabilité potentiels",
+        "L'IA n'a pas vérifié la date de dernière mise à jour ni les issues ouvertes"
+      ],
+      "action_correcte": "Vérifier sur GitHub/npm quand la bibliothèque a été mise à jour pour la dernière fois. Vérifier s'il existe une alternative plus légère et maintenue (date-fns, dayjs). Vérifier les alertes de sécurité (npm audit).",
+      "prompts_verification": [
+        "Quand cette bibliothèque a-t-elle été mise à jour pour la dernière fois ? Est-elle encore maintenue ?",
+        "Quelle est la taille totale de cette dépendance et de ses sous-dépendances ?",
+        "Existe-t-il une alternative plus légère et maintenue pour ce cas d'usage précis ?"
+      ],
+      "lecon": "Une dépendance, c'est une dette. Chaque package ajouté est un code que vous n'avez pas écrit mais que vous devez maintenir, sécuriser et mettre à jour. 'Le plus populaire' ne veut pas dire 'le plus adapté'."
+    }
+  ]
+}
