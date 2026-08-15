@@ -18,7 +18,7 @@ export async function addTerm(term: Omit<Term, "firstSeenAt" | "masteryLevel">) 
     }
     return
   }
-  await db.terms.add({
+  await db.terms.put({
     ...term,
     firstSeenAt: new Date().toISOString(),
     masteryLevel: "decouvert",
@@ -94,7 +94,9 @@ export async function getProgress() {
       dailyChallengeDate: "",
       dailyChallengeProgress: 0,
     } as UserProgress
-    await db.progress.add(p)
+    // put (upsert) plutôt qu'add : plusieurs appels concurrents au premier
+    // chargement (page d'accueil) ne doivent jamais lever ConstraintError.
+    await db.progress.put(p)
   }
   return p
 }
