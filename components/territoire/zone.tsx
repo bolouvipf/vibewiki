@@ -11,9 +11,17 @@ export interface ZoneProps {
   validated: boolean
   color: string
   index: number
+  locked?: boolean
 }
 
 const colorConfig: Record<string, { gradient: string; border: string; badge: string; fill: string; glow: string }> = {
+  parcours: {
+    gradient: "from-[#1E2D4F]/25 via-[#D9A441]/10 to-transparent",
+    border: "border-[#1E2D4F]/40",
+    badge: "bg-gradient-to-br from-[#1E2D4F] to-[#3d4f7d] text-white",
+    fill: "bg-[#1E2D4F]",
+    glow: "shadow-[#1E2D4F]/10",
+  },
   transversal: {
     gradient: "from-[#1E2D4F]/20 via-[#1E2D4F]/5 to-transparent",
     border: "border-[#1E2D4F]/30",
@@ -42,6 +50,13 @@ const colorConfig: Record<string, { gradient: string; border: string; badge: str
     fill: "bg-[#5B7A5E]",
     glow: "shadow-[#5B7A5E]/10",
   },
+  ia: {
+    gradient: "from-[#202A22]/20 via-[#202A22]/5 to-transparent",
+    border: "border-[#202A22]/30",
+    badge: "bg-[#202A22] text-white",
+    fill: "bg-[#202A22]",
+    glow: "shadow-[#202A22]/10",
+  },
 }
 
 export function TerritoryZone({
@@ -54,14 +69,15 @@ export function TerritoryZone({
   completedCount,
   validated,
   index,
+  locked = false,
 }: ZoneProps) {
   const c = colorConfig[pillarId] ?? colorConfig.transversal
 
   return (
     <Link
-      href={`/piliers/${pillarId}`}
+      href={locked ? "/piliers/parcours" : `/piliers/${pillarId}`}
       style={{ animationDelay: `${index * 100}ms` }}
-      className={`group relative animate-slide-up block rounded-2xl border-2 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden ${c.border} ${c.glow}`}
+      className={`group relative animate-slide-up block rounded-2xl border-2 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden ${c.border} ${c.glow} ${locked ? "opacity-90" : ""}`}
     >
       <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${c.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
@@ -79,6 +95,11 @@ export function TerritoryZone({
               {validated && (
                 <span className="rounded-full bg-moss/10 px-2 py-0.5 font-mono text-[9px] text-moss">
                   Validé
+                </span>
+              )}
+              {locked && (
+                <span className="rounded-full bg-compass/10 px-2 py-0.5 font-mono text-[9px] text-compass">
+                  🔒 via le parcours
                 </span>
               )}
             </div>

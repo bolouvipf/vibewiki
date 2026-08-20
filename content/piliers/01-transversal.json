@@ -95,8 +95,15 @@
           "id": "ex-trans-secrets",
           "type": "question_de_verification",
           "prompt": "L'IA vous demande de stocker une clé API secrète dans une variable d'environnement. Pourquoi ne pas la mettre directement dans le code ?",
-          "payload": {},
+          "payload": { "affirmation": "Je vais mettre la clé API directement dans le code pour simplifier.", "options": ["Ne le fais pas : le code est visible sur GitHub, tout le monde verrait la clé", "C'est une bonne idée pour gagner du temps", "Ça accélérera le site", "Ça facilite le partage avec les collègues"], "correctIndex": 0 },
           "relatedTermIds": ["term-env-vars"]
+        },
+        {
+          "id": "ex-trans-cumul",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA installe une nouvelle dépendance, commite la modification et le build Vercel échoue. Que consultez-vous pour comprendre l'échec ?",
+          "payload": { "options": ["Les logs du build Vercel", "La console F12 du navigateur", "Le fichier SQL", "La liste des environnements"], "correctIndex": 0 },
+          "relatedTermIds": ["term-dependency", "term-commit", "term-build", "term-vercel"]
         },
         {
           "id": "ex-trans-cicd",

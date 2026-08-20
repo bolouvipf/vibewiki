@@ -49,6 +49,37 @@ export type ExercisePayload =
   | { type: "remise_en_ordre" } & z.infer<typeof remiseEnOrdrePayload>
   | { type: "question_de_verification" } & z.infer<typeof questionVerificationPayload>
 
+export type QcmPayload = z.infer<typeof qcmPayload>
+export type VraiFauxPayload = z.infer<typeof vraiFauxPayload>
+export type ReperagePayload = z.infer<typeof reperagePayload>
+export type AssociationPayload = z.infer<typeof associationPayload>
+export type RemiseEnOrdrePayload = z.infer<typeof remiseEnOrdrePayload>
+export type QuestionVerificationPayload = z.infer<typeof questionVerificationPayload>
+
+export function getQcmPayload(payload: unknown): QcmPayload {
+  return payload as QcmPayload
+}
+
+export function getVraiFauxPayload(payload: unknown): VraiFauxPayload {
+  return payload as VraiFauxPayload
+}
+
+export function getReperagePayload(payload: unknown): ReperagePayload {
+  return payload as ReperagePayload
+}
+
+export function getAssociationPayload(payload: unknown): AssociationPayload {
+  return payload as AssociationPayload
+}
+
+export function getRemiseEnOrdrePayload(payload: unknown): RemiseEnOrdrePayload {
+  return payload as RemiseEnOrdrePayload
+}
+
+export function getQuestionVerificationPayload(payload: unknown): QuestionVerificationPayload {
+  return payload as QuestionVerificationPayload
+}
+
 export function validateQCM(payload: unknown, answer: number) {
   const parsed = qcmPayload.parse(payload)
   return { correct: answer === parsed.correctIndex, correctIndex: parsed.correctIndex }

@@ -140,6 +140,13 @@ export interface Badge {
 
 export const BADGES: Badge[] = [
   {
+    id: "welcome",
+    name: "🤝 Bienvenue",
+    description: "Valider le parcours d'arrivée",
+    icon: "🤝",
+    condition: (p) => (p.validatedPillarIds || []).includes("parcours")
+  },
+  {
     id: "detective",
     name: "🕵️ Détective",
     description: "Repérer 10 suppositions dans les réponses IA",
@@ -258,6 +265,15 @@ export function generateDailyChallenge(): DailyChallenge {
       target: 3,
       reward: XP_DAILY_CHALLENGE,
       pillarId: "front"
+    },
+    {
+      id: "daily-ia",
+      type: "pillar_focus",
+      title: "Journée IA",
+      description: "Réussir 3 exercices dans le pilier Piloter son IA",
+      target: 3,
+      reward: XP_DAILY_CHALLENGE,
+      pillarId: "ia"
     },
     {
       id: "daily-explorer",

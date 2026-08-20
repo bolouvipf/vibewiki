@@ -470,4 +470,51 @@ interface UserProgress {
 
 ---
 
-*Document de référence — Vibewiki. Dernière mise à jour : 15 août 2026.*
+## 13. Prochain chantier : Parcours d'arrivée (cours commun obligatoire)
+
+> Décision pédagogique : avant les 4 piliers, un **cours commun court et obligatoire en douceur** — le socle *mental* (les piliers restant le socle *technique*). Il ne duplique pas le pilier Outils transversaux : il installe la carte du territoire, le réflexe de vérification et le vocabulaire minimal, pour que chaque pilier démarre avec les mêmes appuis.
+
+### 13.1 Pourquoi (fondements pédagogiques)
+
+- **Charge cognitive (Sweller)** : un non-codeur qui démarre sur Back absorbe API + endpoint + HTTP + auth d'un coup ; le parcours commun découpe la nouveauté en étapes maîtrisables.
+- **Ancrage (Ausubel)** : chaque pilier s'appuie sur un vocabulaire partagé (API, commit, build, table) ; sans socle, chaque notion doit ré-expliquer ou l'utilisateur accumule de la confusion.
+- **Signature produit d'abord** : le réflexe central (« l'IA propose, vous vérifiez ») est transversal et doit s'installer *avant* les piliers techniques.
+- **Victoires rapides** : débuter par « comment marche mon site » donne du sens immédiat (levier psychologique *pertinence*).
+
+### 13.2 Structure (3 notions, ~12 min chacune, micro-sessions)
+
+Nouveau pilier `parcours` (ordre 0), suivant la structure canonique de notion (tentative libre → feedback incarné → exemple → exercice → réflexion active) :
+
+1. **La carte du territoire** — comment une app web fonctionne (front → back → base → déploiement), exercice `association_territoire`.
+2. **Le réflexe de vérification** — supposition vs vérifiable (mini-entraînement `vrai_faux_pas_verifiable` + `reperage_supposition`).
+3. **Le vocabulaire minimal** — API, commit, build, table (QCM contextualisés).
+
+### 13.3 Règles fonctionnelles
+
+- [ ] Le parcours d'arrivée est proposé **à la première ouverture** (moment d'arrivée : curiosité + anxiété → message d'accueil aligné sur la promesse, pas « app pour apprendre l'informatique »).
+- [ ] **Verrouillage en douceur** : les piliers 1–4 sont visibles mais marqués « à découvrir via le parcours » tant que le parcours n'est pas validé ; un bouton **« je connais déjà, passer »** permet de contourner (principe d'autonomie, jamais d'obligation absolue).
+- [ ] Le parcours reste accessible à tout moment depuis l'accueil (mode « réviser les bases »).
+- [ ] Validation : exactement 3 exercices de validation finale (règle commune à tous les piliers).
+- [ ] Badge **« Bienvenue »** débloqué à la validation du parcours ; XP attribuée comme un pilier classique.
+- [ ] **Interleaving vers les piliers** : au moins 1 exercice des piliers 1–4 remobilise un terme du parcours via `relatedTermIds` (les termes du parcours existent dans les `terms` des piliers concernés ou dans un `terms` dédié).
+- [ ] Les termes du parcours (API, commit, build, table) alimentent le dictionnaire personnel comme les autres notions.
+- [ ] Contenu embarqué au build comme les 4 piliers (offline-first inchangé).
+
+### 13.4 Critères de réception
+
+- [ ] Un nouvel utilisateur voit le parcours d'arrivée à la première ouverture.
+- [ ] Les piliers 1–4 se déverrouillent après validation du parcours, ou immédiatement via « passer ».
+- [ ] Le parcours suit la structure canonique (tentative → feedback → exemple → exercices → réflexion) et dure ~12 min par notion.
+- [ ] `bun test`, `bun run build` et `bun run lint` passent avec le nouveau pilier.
+
+### 13.5 Ordre de réalisation
+
+1. Ajouter `06-parcours.json` (ou `00-parcours.json`, ordre 0) et le déclarer dans toutes les listes de piliers (accueil, fiche pilier, validation, dictionnaire, badges, territoire, défi du jour).
+2. Logique de verrouillage doux (état local, bouton « passer », déverrouillage à la validation).
+3. Écran d'accueil première ouverture + badge « Bienvenue ».
+4. Exercices d'interleaving remobilisant les termes du parcours dans les piliers 1–4.
+5. Mise à jour de `tests/unit/content.test.ts` (6 piliers) + vérifications complètes.
+
+---
+
+*Document de référence — Vibewiki. Dernière mise à jour : 19 août 2026.*

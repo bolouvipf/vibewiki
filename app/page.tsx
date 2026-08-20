@@ -4,25 +4,30 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { Hearts } from "@/components/ui/hearts"
 import { BottomNav } from "@/components/ui/bottom-nav"
+import { Button } from "@/components/ui/button"
 import { TerritoryMap } from "@/components/territoire/map"
 import { getGamificationState, type DailyChallenge } from "@/lib/gamification/engine"
-import { getProgress, isPillarValidated, migrateProgress } from "@/lib/db/queries"
+import { getProgress, isPillarValidated, isParcoursUnlocked, migrateProgress, passParcours } from "@/lib/db/queries"
+import pillar0 from "@/content/piliers/00-parcours.json"
 import pillar1 from "@/content/piliers/01-transversal.json"
 import pillar2 from "@/content/piliers/02-front.json"
 import pillar3 from "@/content/piliers/03-back.json"
 import pillar4 from "@/content/piliers/04-database.json"
+import pillar5 from "@/content/piliers/05-ia.json"
 
-const pillars = [pillar1, pillar2, pillar3, pillar4]
+const pillars = [pillar0, pillar1, pillar2, pillar3, pillar4, pillar5]
 
 export default function HomePage() {
   const [state, setState] = useState({ xp: 0, streakDays: 0, hearts: 5, league: "", completedNotions: 0 })
   const [dailyChallenge, setDailyChallenge] = useState<DailyChallenge | null>(null)
   const [completedIds, setCompletedIds] = useState<readonly string[]>([])
   const [validatedPillars, setValidatedPillars] = useState<readonly string[]>([])
+  const [parcoursUnlocked, setParcoursUnlocked] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     migrateProgress()
+    isParcoursUnlocked().then(setParcoursUnlocked)
     getGamificationState()
       .then((s) => {
         setState({ xp: s.xp, streakDays: s.streakDays, hearts: s.hearts, league: s.league, completedNotions: s.completedNotions })
@@ -42,6 +47,10 @@ export default function HomePage() {
       const total = pillar.notions.length
       const completedCount = ids ? pillar.notions.filter((n) => ids.includes(n.id)).length : 0
       const progress = total > 0 ? (completedCount / total) * 100 : 0
+      const locked =
+        pillar.pillarId !== "parcours" &&
+        !parcoursUnlocked &&
+        !(validated ? validated.includes(pillar.pillarId) : false)
       return {
         pillarId: pillar.pillarId,
         title: pillar.title,
@@ -53,9 +62,15 @@ export default function HomePage() {
         validated: validated ? validated.includes(pillar.pillarId) : false,
         color: pillar.color,
         index: i,
+        locked,
       }
     })
-  }, [completedIds, validatedPillars])
+  }, [completedIds, validatedPillars, parcoursUnlocked])
+
+  async function handlePassParcours() {
+    await passParcours()
+    setParcoursUnlocked(true)
+  }
 
   return (
     <div className="mx-auto min-h-screen max-w-6xl px-4 pb-24 pt-8 animate-fade-in">
@@ -123,6 +138,30 @@ export default function HomePage() {
           <span className="font-heading text-xs uppercase tracking-widest text-ink/30">Carte des zones</span>
           <span className="h-px flex-1 bg-gradient-to-l from-ink/10 to-transparent" />
         </div>
+        {!parcoursUnlocked && (
+          <div className="mb-5 rounded-2xl border-2 border-[#1E2D4F]/30 bg-gradient-to-br from-[#1E2D4F]/10 via-white to-[#D9A441]/10 p-5 animate-slide-up">
+            <div className="flex items-start gap-3">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#1E2D4F] text-xl text-white shadow-sm">🧭</span>
+              <div className="flex-1">
+                <p className="font-heading text-base font-bold text-marine">Bienvenue ! Commençons par la carte du territoire</p>
+                <p className="mt-1 font-body text-sm text-ink/60">
+                  3 notions courtes pour savoir où vivent les choses, vérifier ton IA et comprendre le vocabulaire des devs.
+                </p>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <Link href="/piliers/parcours">
+                    <Button size="sm" className="bg-[#1E2D4F] text-white hover:bg-[#1E2D4F]/90">Commencer le parcours</Button>
+                  </Link>
+                  <button
+                    onClick={handlePassParcours}
+                    className="rounded-lg border border-ink/10 bg-white px-3 py-2 font-body text-xs font-medium text-ink/50 transition-colors hover:border-ink/30 hover:text-ink"
+                  >
+                    Je connais déjà, passer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <TerritoryMap zones={zones} />
       </div>
 

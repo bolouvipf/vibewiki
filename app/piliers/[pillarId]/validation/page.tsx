@@ -19,6 +19,12 @@ import {
   validateAssociation,
   validateRemiseEnOrdre,
   validateQuestionVerification,
+  getQcmPayload,
+  getVraiFauxPayload,
+  getReperagePayload,
+  getAssociationPayload,
+  getRemiseEnOrdrePayload,
+  getQuestionVerificationPayload,
 } from "@/lib/exercises/validators"
 import { getProgress, updateProgress, validatePillar } from "@/lib/db/queries"
 import {
@@ -31,18 +37,22 @@ import {
   updateStreak,
   getGamificationState,
 } from "@/lib/gamification/engine"
+import pillar0 from "@/content/piliers/00-parcours.json"
 import pillar1 from "@/content/piliers/01-transversal.json"
 import pillar2 from "@/content/piliers/02-front.json"
 import pillar3 from "@/content/piliers/03-back.json"
 import pillar4 from "@/content/piliers/04-database.json"
+import pillar5 from "@/content/piliers/05-ia.json"
 
-const pillars = [pillar1, pillar2, pillar3, pillar4]
+const pillars = [pillar0, pillar1, pillar2, pillar3, pillar4, pillar5]
 
 const pillarAccents: Record<string, { primary: string; light: string; text: string }> = {
+  parcours: { primary: "bg-marine", light: "bg-marine/10", text: "text-marine" },
   transversal: { primary: "bg-marine", light: "bg-marine/10", text: "text-marine" },
   front: { primary: "bg-compass", light: "bg-compass/10", text: "text-compass" },
   back: { primary: "bg-alert", light: "bg-alert/10", text: "text-alert" },
   database: { primary: "bg-moss", light: "bg-moss/10", text: "text-moss" },
+  ia: { primary: "bg-ink", light: "bg-ink/10", text: "text-ink" },
 }
 
 export default function ValidationPage() {
@@ -203,41 +213,41 @@ export default function ValidationPage() {
         {exercise.type === "qcm_contextualise" && (
           <QcmContextualise
             prompt={exercise.prompt}
-            options={(exercise.payload as { options: string[]; correctIndex: number }).options}
-            correctIndex={(exercise.payload as { options: string[]; correctIndex: number }).correctIndex}
+            options={getQcmPayload(exercise.payload).options}
+            correctIndex={getQcmPayload(exercise.payload).correctIndex}
             onAnswer={(i) => handleAnswer(validateQCM(exercise.payload, i))}
             disabled={false}
           />
         )}
         {exercise.type === "vrai_faux_pas_verifiable" && (
           <VraiFaux
-            affirmation={(exercise.payload as { affirmation: string; correctAnswer: string }).affirmation}
-            correctAnswer={(exercise.payload as { affirmation: string; correctAnswer: "vrai" | "faux" | "pas_verifiable" }).correctAnswer}
+            affirmation={getVraiFauxPayload(exercise.payload).affirmation}
+            correctAnswer={getVraiFauxPayload(exercise.payload).correctAnswer}
             onAnswer={(a) => handleAnswer(validateVraiFaux(exercise.payload, a))}
             disabled={false}
           />
         )}
         {exercise.type === "reperage_supposition" && (
           <ReperageSupposition
-            text={(exercise.payload as { text: string; suppositionStart: number; suppositionEnd: number }).text}
-            suppositionStart={(exercise.payload as { text: string; suppositionStart: number; suppositionEnd: number }).suppositionStart}
-            suppositionEnd={(exercise.payload as { text: string; suppositionStart: number; suppositionEnd: number }).suppositionEnd}
+            text={getReperagePayload(exercise.payload).text}
+            suppositionStart={getReperagePayload(exercise.payload).suppositionStart}
+            suppositionEnd={getReperagePayload(exercise.payload).suppositionEnd}
             onAnswer={(s, e) => handleAnswer(validateReperage(exercise.payload, s, e))}
             disabled={false}
           />
         )}
         {exercise.type === "association_territoire" && (
           <AssociationTerritoire
-            term={(exercise.payload as { term: string; correctPlace: string; places: string[] }).term}
-            correctPlace={(exercise.payload as { term: string; correctPlace: string; places: string[] }).correctPlace}
+            term={getAssociationPayload(exercise.payload).term}
+            correctPlace={getAssociationPayload(exercise.payload).correctPlace}
             onAnswer={(p) => handleAnswer(validateAssociation(exercise.payload, p))}
             disabled={false}
           />
         )}
         {exercise.type === "remise_en_ordre" && (
           <RemiseEnOrdre
-            steps={(exercise.payload as { steps: string[]; correctOrder: number[] }).steps}
-            correctOrder={(exercise.payload as { steps: string[]; correctOrder: number[] }).correctOrder}
+            steps={getRemiseEnOrdrePayload(exercise.payload).steps}
+            correctOrder={getRemiseEnOrdrePayload(exercise.payload).correctOrder}
             onAnswer={(o) => handleAnswer(validateRemiseEnOrdre(exercise.payload, o))}
             disabled={false}
           />
@@ -245,8 +255,8 @@ export default function ValidationPage() {
         {exercise.type === "question_de_verification" && (
           <QuestionVerification
             affirmation={exercise.prompt}
-            options={(exercise.payload as { affirmation: string; options: string[]; correctIndex: number }).options}
-            correctIndex={(exercise.payload as { affirmation: string; options: string[]; correctIndex: number }).correctIndex}
+            options={getQuestionVerificationPayload(exercise.payload).options}
+            correctIndex={getQuestionVerificationPayload(exercise.payload).correctIndex}
             onAnswer={(i) => handleAnswer(validateQuestionVerification(exercise.payload, i))}
             disabled={false}
           />

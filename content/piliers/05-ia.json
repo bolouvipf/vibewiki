@@ -1,0 +1,433 @@
+{
+  "pillarId": "ia",
+  "title": "Piloter son IA",
+  "subtitle": "Comprendre ce qui se passe derrière la réponse",
+  "description": "Modèles de langage, tokens, prompts, agents, MCP, RAG, règles de projet — les notions pour piloter vos assistants IA en connaissance de cause, et ne plus valider « par défaut ».",
+  "icon": "\uD83E\uDD16",
+  "color": "#202A22",
+  "order": 5,
+  "technicalSheet": {
+    "explanation": "Vos assistants IA (Claude, ChatGPT, OpenCode, Cursor…) ne sont pas des boîtes magiques : ce sont des modèles de langage qui prédisent du texte, alimentés par le contexte que vous leur donnez. Comprendre cette mécanique change tout : vous savez pourquoi l'IA hésite, pourquoi elle se trompe, et comment lui donner ce qu'il faut pour être utile. Les agents, les protocoles comme MCP et les techniques comme RAG ne sont que des façons de structurer cette mécanique.",
+    "utility": "C'est le pilier le plus rentable pour vous : la plupart des erreurs coûteuses viennent de suppositions non vérifiées, de contexte trop court, ou de promesses impossibles (mémoire infinie, connaissance du projet « par défaut »). En apprenant où s'arrête la connaissance d'un modèle et comment vérifier, vous transformez l'IA en outil fiable au lieu d'un oracle flatteur."
+  },
+  "notions": [
+    {
+      "id": "ia-lesson-1",
+      "term": "Modèle de langage (LLM)",
+      "title": "Le modèle de langage : ce qui se cache derrière la réponse",
+      "order": 1,
+      "course": {
+        "explanation": "Un LLM (Large Language Model) est un programme qui prédit le texte le plus plausible après ce que vous lui avez donné. Il n'exécute rien, ne « sait » rien : il génère du texte statistiquement probable. C'est la base de tout : comprendre cela explique les erreurs, les inventions et les affirmations trop assurées.",
+        "practicalMeaning": "Quand l'IA dit « je suis sûr que... », elle exprime une probabilité, pas une certitude. Le modèle a été entraîné sur d'énormes quantités de texte à une date donnée : tout ce qui est plus récent, ou spécifique à votre projet, il ne peut pas le connaître par lui-même.",
+        "example": "Vous demandez à l'IA : « Mon site utilise Supabase, c'est quoi le statut de mon serveur ? ». Elle répond avec assurance : « Votre serveur est opérationnel. » En réalité, elle ne peut pas le savoir sans y accéder : c'est une prédiction, pas une lecture. La bonne démarche : lui demander comment vérifier."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-llm-1",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA vous dit : « Je suis entraîné sur des données publiques jusqu'à une certaine date. » Que signifie cette phrase pour votre projet ?",
+          "payload": { "options": ["Elle connaît tout de votre projet par défaut", "Elle ne connaît que ce que vous lui donnez, plus sa formation générale", "Elle a une mémoire infinie de vos conversations", "Elle peut lire votre base de données à distance"], "correctIndex": 1 },
+          "relatedTermIds": ["term-llm"]
+        },
+        {
+          "id": "ex-ia-llm-2",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Je me souviens de toutes les conversations que vous avez eues avec moi. »",
+          "payload": { "affirmation": "Je me souviens de toutes les conversations que vous avez eues avec moi.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-llm"]
+        },
+        {
+          "id": "ex-ia-llm-3",
+          "type": "association_territoire",
+          "prompt": "Où « vit » le modèle de langage que vous utilisez ?",
+          "payload": { "term": "LLM", "correctPlace": "Chez le fournisseur (API Claude, OpenAI…)", "places": ["Chez le fournisseur (API Claude, OpenAI…)", "GitHub", "Vercel", "Dans votre navigateur"] },
+          "relatedTermIds": ["term-llm"]
+        },
+        {
+          "id": "ex-ia-llm-4",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA affirme un chiffre avec assurance sur votre trafic. Que devez-vous en conclure ?",
+          "payload": { "options": ["Elle l'a vérifié dans vos logs", "C'est une prédiction plausible, à vérifier", "Elle lit votre tableau de bord en direct", "C'est forcément exact puisque c'est une IA"], "correctIndex": 1 },
+          "relatedTermIds": ["term-llm"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-2",
+      "term": "Token",
+      "title": "Les tokens : la monnaie invisible de l'IA",
+      "order": 2,
+      "course": {
+        "explanation": "Un token est une unité de texte que le modèle traite (souvent quelques caractères, pas forcément un mot entier). Tout ce que vous envoyez et recevez est découpé en tokens, et chaque appel coûte un nombre de tokens.",
+        "practicalMeaning": "Les limites de « tokens » expliquent pourquoi une longue conversation devient lente ou refusée : la fenêtre de contexte est remplie. Elles expliquent aussi le coût : moins de tokens inutiles = appels moins chers et réponses plus rapides.",
+        "example": "L'IA vous dit : « Votre document dépasse la limite de tokens, je n'ai lu que la première moitié. » Vous comprenez alors que le texte a été tronqué : la fin du document n'a jamais été analysée, même si l'IA répond comme si elle avait tout vu."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-token-1",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « Ce fichier fait 8 000 tokens. » De quoi parle-t-elle ?",
+          "payload": { "options": ["Du nombre de caractères exactement", "Des unités de texte que le modèle traite", "Du nombre de lignes du fichier", "De la taille du fichier en kilo-octets"], "correctIndex": 1 },
+          "relatedTermIds": ["term-token"]
+        },
+        {
+          "id": "ex-ia-token-2",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Un token correspond toujours à un mot complet en français. »",
+          "payload": { "affirmation": "Un token correspond toujours à un mot complet en français.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-token"]
+        },
+        {
+          "id": "ex-ia-token-3",
+          "type": "qcm_contextualise",
+          "prompt": "Vous collez un long document et l'IA répond comme si elle l'avait entièrement lu, mais elle a été tronquée par la limite de tokens. Quelle est la meilleure réaction ?",
+          "payload": { "options": ["Faire confiance : elle a répondu", "Lui demander de résumer d'abord, ou de traiter le document par sections", "Recommencer sans rien changer", "Supprimer le document"], "correctIndex": 1 },
+          "relatedTermIds": ["term-token", "term-llm"]
+        },
+        {
+          "id": "ex-ia-token-4",
+          "type": "association_territoire",
+          "prompt": "Où le comptage des tokens se fait-il ?",
+          "payload": { "term": "tokens", "correctPlace": "Dans l'API du fournisseur (à l'appel)", "places": ["Dans l'API du fournisseur (à l'appel)", "Dans votre fichier .env", "Sur GitHub", "Dans la base de données"] },
+          "relatedTermIds": ["term-token"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-3",
+      "term": "Prompt",
+      "title": "Le prompt : vos instructions valent mieux que la magie",
+      "order": 3,
+      "course": {
+        "explanation": "Le prompt est l'ensemble de ce que vous envoyez au modèle : vos instructions, le contexte, les exemples, les contraintes. La qualité de la réponse dépend surtout de la qualité de ce que vous mettez dedans.",
+        "practicalMeaning": "Un bon prompt dit au modèle quoi faire, avec quel contexte, et comment vérifier son travail. Ce n'est pas une formule magique : c'est une fiche de travail. Les règles de projet (AGENTS.md, CLAUDE.md) sont des prompts permanents que l'IA recharge à chaque session.",
+        "example": "Prompt vague : « Améliore mon site. » L'IA propose des changements au hasard. Prompt précis : « Analyse la page d'accueil (fichier app/page.tsx). Trouve les 3 problèmes les plus visibles pour un visiteur non technique. Propose des corrections, et dis-moi comment vérifier chacune avant de l'appliquer. » Les deux réponses n'ont rien à voir."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-prompt-1",
+          "type": "qcm_contextualise",
+          "prompt": "Qu'est-ce qu'un prompt, concrètement ?",
+          "payload": { "options": ["Un raccourci clavier", "Tout ce que vous envoyez au modèle : instructions, contexte, exemples", "Une commande Git", "Un fichier de configuration du serveur"], "correctIndex": 1 },
+          "relatedTermIds": ["term-prompt"]
+        },
+        {
+          "id": "ex-ia-prompt-2",
+          "type": "question_de_verification",
+          "prompt": "L'IA affirme : « Ce prompt est le meilleur possible pour votre objectif. »",
+          "payload": { "affirmation": "Ce prompt est le meilleur possible pour votre objectif.", "options": ["Quelle partie de ma demande le prompt ne couvre pas encore ?", "Es-tu sûr à 100% ?", "Est-ce que ce prompt est célèbre ?", "Pourrais-tu le rendre plus long ?"], "correctIndex": 0 },
+          "relatedTermIds": ["term-prompt"]
+        },
+        {
+          "id": "ex-ia-prompt-3",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre la construction d'un bon prompt.",
+          "payload": {
+            "steps": ["Définir l'objectif précis", "Donner le contexte du projet", "Ajouter un exemple de résultat attendu", "Demander comment vérifier la réponse", "Relire la réponse et la corriger si besoin"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-prompt", "term-llm"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-4",
+      "term": "Fenêtre de contexte",
+      "title": "La fenêtre de contexte : ce que l'IA voit vraiment",
+      "order": 4,
+      "course": {
+        "explanation": "La fenêtre de contexte est l'espace limité que le modèle consacre à votre conversation : votre prompt, vos fichiers, les échanges précédents, et la réponse. Tout ce qui ne tient pas dedans n'est simplement pas vu.",
+        "practicalMeaning": "Quand l'IA « oublie » le début de la conversation, ce n'est pas un caprice : c'est la fenêtre qui déborde. Quand elle affirme des choses sur votre code sans que vous lui ayez fourni les fichiers, elle suppose — pas elle ne sait pas.",
+        "example": "Vous travaillez sur un projet de 50 fichiers, mais vous n'en avez collé que 3 dans la conversation. L'IA affirme : « Votre projet est bien structuré. » Elle n'a vu que 3 fichiers : cette affirmation est une supposition, pas un constat."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-context-1",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA vous dit : « Le contexte de cette conversation est plein. » Que devez-vous comprendre ?",
+          "payload": { "options": ["Elle a une panne technique", "Elle ne peut plus voir que ce qui tient dans sa fenêtre limitée — le reste est hors de portée", "Elle a besoin d'une mise à jour", "Elle a supprimé votre compte"], "correctIndex": 1 },
+          "relatedTermIds": ["term-context"]
+        },
+        {
+          "id": "ex-ia-context-2",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Je connais l'architecture complète de votre projet. » (Vous ne lui avez montré qu'une partie des fichiers.)",
+          "payload": { "affirmation": "Je connais l'architecture complète de votre projet.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-context", "term-llm"]
+        },
+        {
+          "id": "ex-ia-context-3",
+          "type": "reperage_supposition",
+          "prompt": "Sélectionnez la phrase qui annonce une supposition non vérifiée dans cette réponse d'IA.",
+          "payload": {
+            "text": "Votre agent a déjà configuré l'authentification complète sur Supabase avec des règles de sécurité parfaites, donc vous pouvez publier immédiatement.",
+            "suppositionStart": 15,
+            "suppositionEnd": 20
+          },
+          "relatedTermIds": ["term-context", "term-agent"]
+        },
+        {
+          "id": "ex-ia-context-4",
+          "type": "qcm_contextualise",
+          "prompt": "Pour que l'IA réponde juste sur votre code, la meilleure pratique est :",
+          "payload": { "options": ["Lui faire confiance sur sa formation générale", "Lui fournir les fichiers et le contexte pertinents dans la conversation", "Lui demander de deviner", "Relancer la conversation à chaque fois"], "correctIndex": 1 },
+          "relatedTermIds": ["term-context", "term-prompt"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-5",
+      "term": "Agent IA",
+      "title": "L'agent IA : un assistant qui agit, pas seulement qui parle",
+      "order": 5,
+      "course": {
+        "explanation": "Un agent IA ne se contente pas de répondre : il enchaîne planification, actions (modifier un fichier, lancer une commande), observation des résultats, puis itère jusqu'à atteindre l'objectif. C'est la différence entre un conseiller et un exécutant.",
+        "practicalMeaning": "Plus l'agent a de liberté (modifier, exécuter, publier), plus il peut vous faire gagner du temps — et plus les conséquences d'une supposition sont graves. Vos cœurs de sécurité : regarder ce qu'il propose avant qu'il ne le fasse, et lui imposer de vérifier.",
+        "example": "OpenCode ou Cursor peuvent, sur votre demande, lire vos fichiers, modifier du code, lancer des tests, puis résumer. Si l'agent estime « le build est passé » sans l'avoir lancé, c'est une supposition dangereuse : exigez la preuve (la sortie réelle de la commande)."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-agent-1",
+          "type": "qcm_contextualise",
+          "prompt": "Qu'est-ce qui distingue un agent IA d'une simple conversation ?",
+          "payload": { "options": ["Il parle plus vite", "Il enchaîne actions et observations jusqu'à l'objectif", "Il connaît l'avenir", "Il ne fait jamais d'erreur"], "correctIndex": 1 },
+          "relatedTermIds": ["term-agent"]
+        },
+        {
+          "id": "ex-ia-agent-2",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre le cycle de travail d'un agent.",
+          "payload": {
+            "steps": ["Comprendre l'objectif", "Planifier les actions", "Exécuter une action (modifier un fichier, lancer une commande)", "Observer le résultat réel", "Corriger et itérer jusqu'à validation"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-agent"]
+        },
+        {
+          "id": "ex-ia-agent-3",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'agent affirme : « J'ai exécuté les tests, tout passe. » (Il ne vous montre aucune sortie.)",
+          "payload": { "affirmation": "J'ai exécuté les tests, tout passe.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-agent", "term-llm"]
+        },
+        {
+          "id": "ex-ia-agent-4",
+          "type": "question_de_verification",
+          "prompt": "Un agent propose de modifier directement votre base de données en production. Quelle question poser d'abord ?",
+          "payload": { "affirmation": "Je vais modifier directement la base de données en production.", "options": ["As-tu fait une sauvegarde et un test sur un environnement de développement d'abord ?", "Est-ce que ça va être rapide ?", "Tu as déjà fait ça sur d'autres projets ?", "Peux-tu le faire sans me demander ?"], "correctIndex": 0 },
+          "relatedTermIds": ["term-agent", "term-context"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-6",
+      "term": "MCP",
+      "title": "MCP : la prise standard qui relie l'IA à vos outils",
+      "order": 6,
+      "course": {
+        "explanation": "MCP (Model Context Protocol) est un protocole standard qui permet à un assistant IA de se connecter à des outils et sources de données (base de données, fichiers, services) via une interface unique, au lieu d'une intégration sur mesure par outil.",
+        "practicalMeaning": "Quand l'IA « interroge votre base » ou « lit vos fichiers », c'est souvent via un serveur MCP. Important : MCP donne un accès, il n'ajoute ni mémoire ni connaissance au modèle. L'IA reste un modèle de langage — elle peut toujours mal lire ou mal interpréter.",
+        "example": "Vous configurez un serveur MCP qui expose la base Supabase de votre projet. L'IA peut désormais exécuter des requêtes. Elle affirme : « Votre table utilisateurs contient 3 214 lignes. » Vérifiable ? Oui — via la requête elle-même. MCP ne rend pas cette affirmation automatiquement vraie."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-mcp-1",
+          "type": "qcm_contextualise",
+          "prompt": "À quoi sert MCP pour votre assistant IA ?",
+          "payload": { "options": ["À lui donner une mémoire infinie", "À le connecter à des outils et données via un standard unique", "À le rendre plus rapide", "À remplacer votre hébergeur"], "correctIndex": 1 },
+          "relatedTermIds": ["term-mcp"]
+        },
+        {
+          "id": "ex-ia-mcp-2",
+          "type": "association_territoire",
+          "prompt": "Où se situe un serveur MCP dans l'architecture ?",
+          "payload": { "term": "MCP", "correctPlace": "Entre l'IA et vos outils/données", "places": ["Entre l'IA et vos outils/données", "Dans le navigateur de l'utilisateur", "Sur GitHub", "Dans le build de votre site"] },
+          "relatedTermIds": ["term-mcp"]
+        },
+        {
+          "id": "ex-ia-mcp-3",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Grâce à MCP, j'ai maintenant une mémoire parfaite de tout votre projet. »",
+          "payload": { "affirmation": "Grâce à MCP, j'ai maintenant une mémoire parfaite de tout votre projet.", "correctAnswer": "faux" },
+          "relatedTermIds": ["term-mcp", "term-llm"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-7",
+      "term": "RAG",
+      "title": "RAG : donner à l'IA vos documents au bon moment",
+      "order": 7,
+      "course": {
+        "explanation": "RAG (Retrieval-Augmented Generation) consiste à chercher, au moment de la question, les passages pertinents dans vos documents et à les injecter dans le contexte de l'IA, pour qu'elle réponde à partir d'eux plutôt que de sa seule formation.",
+        "practicalMeaning": "C'est la différence entre « réponds d'après ta formation » et « réponds d'après ces 3 extraits de ma documentation ». L'IA cite ses sources — mais encore une fois, la qualité dépend de ce qui a été retrouvé : un mauvais découpage peut injecter le mauvais passage.",
+        "example": "Vous posez à l'IA : « Quelles sont nos règles de sauvegarde ? » Sans RAG, elle invente une réponse générique. Avec RAG, le système retrouve le passage de votre documentation interne et la réponse s'appuie dessus. Vérifiez toujours que le passage cité est bien le bon."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-rag-1",
+          "type": "qcm_contextualise",
+          "prompt": "Que fait une technique RAG ?",
+          "payload": { "options": ["Elle entraîne un nouveau modèle", "Elle retrouve des passages pertinents dans vos documents et les injecte dans le contexte", "Elle compresse votre base de données", "Elle déploie votre site"], "correctIndex": 1 },
+          "relatedTermIds": ["term-rag"]
+        },
+        {
+          "id": "ex-ia-rag-2",
+          "type": "remise_en_ordre",
+          "prompt": "Remettez dans l'ordre une réponse basée sur RAG.",
+          "payload": {
+            "steps": ["L'utilisateur pose une question", "Le système cherche les passages pertinents dans les documents", "Les passages sont injectés dans le contexte", "Le modèle rédige sa réponse à partir de ces passages", "L'utilisateur vérifie que les passages cités sont les bons"],
+            "correctOrder": [0, 1, 2, 3, 4]
+          },
+          "relatedTermIds": ["term-rag", "term-context"]
+        },
+        {
+          "id": "ex-ia-rag-3",
+          "type": "question_de_verification",
+          "prompt": "L'IA répond en citant un passage de votre documentation. Quelle question poser ?",
+          "payload": { "affirmation": "Selon votre documentation, cette fonction est dépréciée depuis la version 3.", "options": ["Peux-tu me montrer le passage exact et la version concernée ?", "Es-tu sûr que c'est important ?", "Peux-tu reformuler plus joliment ?", "Cette information est-elle dans ta formation ?"], "correctIndex": 0 },
+          "relatedTermIds": ["term-rag", "term-context"]
+        }
+      ]
+    },
+    {
+      "id": "ia-lesson-8",
+      "term": "Règles de projet (AGENTS.md)",
+      "title": "Les règles de projet : votre mode d'emploi permanent",
+      "order": 8,
+      "course": {
+        "explanation": "Un fichier de règles de projet (AGENTS.md, CLAUDE.md, .cursorrules) est un document à la racine du dépôt qui décrit à l'IA comment travailler sur votre projet : commandes à utiliser, conventions, fichiers clés, interdits. L'agent le lit à chaque session.",
+        "practicalMeaning": "C'est le moyen le plus efficace de rendre l'IA cohérente sans répéter vos consignes : une seule source de vérité que tous les outils (Claude Code, OpenCode, Cursor) peuvent lire. Il fait partie du contexte — donc il consomme des tokens, et il ne dispense pas de vérifier.",
+        "example": "Dans votre AGENTS.md, vous écrivez : « Lancer bun test avant tout changement ; ne jamais modifier les fichiers .env ; utiliser le design system marine/or. » Le lendemain, l'agent propose une couleur hors palette. Vous pointez la règle — et il corrige. Sans le fichier, vous auriez répété la consigne pour la dixième fois."
+      },
+      "exercises": [
+        {
+          "id": "ex-ia-rules-1",
+          "type": "qcm_contextualise",
+          "prompt": "À quoi sert un fichier AGENTS.md dans un projet ?",
+          "payload": { "options": ["À stocker les secrets", "À donner à l'IA un mode d'emploi permanent du projet", "À remplacer le code source", "À générer le build"], "correctIndex": 1 },
+          "relatedTermIds": ["term-rules"]
+        },
+        {
+          "id": "ex-ia-rules-2",
+          "type": "association_territoire",
+          "prompt": "Où « vit » le fichier de règles de projet ?",
+          "payload": { "term": "AGENTS.md", "correctPlace": "À la racine du dépôt du projet", "places": ["À la racine du dépôt du projet", "Dans la base de données", "Chez l'hébergeur uniquement", "Dans le navigateur de l'utilisateur"] },
+          "relatedTermIds": ["term-rules"]
+        },
+        {
+          "id": "ex-ia-rules-3",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « J'ai suivi toutes les règles de votre AGENTS.md dans cette session. »",
+          "payload": { "affirmation": "J'ai suivi toutes les règles de votre AGENTS.md dans cette session.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-rules", "term-context"]
+        },
+        {
+          "id": "ex-ia-rules-4",
+          "type": "qcm_contextualise",
+          "prompt": "Votre AGENTS.md contient des consignes. L'agent en oublie une. Que faites-vous ?",
+          "payload": { "options": ["Supprimer le fichier", "Pointer la règle, vérifier sa compréhension, et renforcer le fichier si besoin", "Changer d'outil", "Accepter : c'est une IA"], "correctIndex": 1 },
+          "relatedTermIds": ["term-rules", "term-prompt"]
+        },
+        {
+          "id": "ex-ia-cumul-parcours",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "Rappel du parcours : une affirmation sans preuve est une supposition ; le réflexe de vérification s'applique aussi aux agents. L'agent affirme : « J'ai vérifié que tout est conforme aux règles avant de modifier. » (Aucune preuve montrée.)",
+          "payload": { "affirmation": "J'ai vérifié que tout est conforme aux règles avant de modifier.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-verification", "term-agent"]
+        }
+      ]
+    }
+  ],
+  "validationExercises": [
+    {
+      "id": "val-ia-1",
+      "type": "qcm_contextualise",
+      "prompt": "Un agent IA vous dit : « J'ai connecté votre base via MCP et relu votre AGENTS.md, je vais maintenant modifier la table utilisateurs en production. » Quelle est la bonne réaction ?",
+      "payload": { "options": ["L'autoriser immédiatement : il a tout vérifié", "Demander la preuve de chaque affirmation, et exiger un environnement de test avant la production", "Le féliciter et partir", "Fermer la conversation"], "correctIndex": 1 },
+      "relatedTermIds": ["term-agent", "term-mcp", "term-rules"]
+    },
+    {
+      "id": "val-ia-2",
+      "type": "vrai_faux_pas_verifiable",
+      "prompt": "L'IA affirme : « Je n'ai pas besoin du fichier : je connais déjà la structure exacte de votre projet grâce à ma formation. »",
+      "payload": { "affirmation": "Je n'ai pas besoin du fichier : je connais déjà la structure exacte de votre projet grâce à ma formation.", "correctAnswer": "faux" },
+      "relatedTermIds": ["term-llm", "term-context", "term-prompt"]
+    },
+    {
+      "id": "val-ia-3",
+      "type": "remise_en_ordre",
+      "prompt": "Remettez dans l'ordre la démarche pour valider une affirmation de votre IA.",
+      "payload": {
+        "steps": ["Identifier ce qui est affirmé", "Déterminer si c'est vérifiable", "Formuler la question de vérification", "Obtenir la preuve (sortie réelle, fichier, passage)", "Conclure : approuver ou corriger"],
+        "correctOrder": [0, 1, 2, 3, 4]
+      },
+      "relatedTermIds": ["term-prompt", "term-context", "term-agent"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term-llm",
+      "term": "Modèle de langage (LLM)",
+      "shortDefinition": "Programme qui prédit du texte plausible, entraîné sur d'énormes corpus.",
+      "practicalMeaning": "Il ne « sait » pas : il génère du texte statistiquement probable. Toute affirmation doit donc être vérifiée, surtout sur votre projet ou sur des faits récents.",
+      "example": "L'IA affirme avec assurance : « Votre serveur est opérationnel. » Elle ne peut pas le savoir sans y accéder : c'est une prédiction. La bonne démarche : lui demander comment vérifier."
+    },
+    {
+      "id": "term-token",
+      "term": "Token",
+      "shortDefinition": "Unité de texte que le modèle traite (souvent quelques caractères).",
+      "practicalMeaning": "Les tokens remplissent la fenêtre de contexte et font le coût des appels. « Dépasser la limite de tokens » signifie qu'une partie de votre texte n'a pas été lue.",
+      "example": "L'IA vous dit : « Votre document dépasse la limite de tokens, je n'ai lu que la première moitié. » Le reste n'a jamais été analysé."
+    },
+    {
+      "id": "term-prompt",
+      "term": "Prompt",
+      "shortDefinition": "Tout ce que vous envoyez au modèle : instructions, contexte, exemples.",
+      "practicalMeaning": "La qualité de la réponse dépend surtout de la qualité du prompt. Les fichiers de règles de projet sont des prompts permanents.",
+      "example": "« Améliore mon site » donne des changements au hasard. « Analyse app/page.tsx, trouve les 3 problèmes les plus visibles, propose des corrections vérifiables » donne un travail précis."
+    },
+    {
+      "id": "term-context",
+      "term": "Fenêtre de contexte",
+      "shortDefinition": "Espace limité du modèle pour votre conversation, vos fichiers et sa réponse.",
+      "practicalMeaning": "Tout ce qui ne tient pas dans la fenêtre n'est pas vu. Si l'IA parle de votre projet sans les fichiers, elle suppose.",
+      "example": "Vous n'avez collé que 3 fichiers sur 50. L'IA affirme : « Votre projet est bien structuré. » C'est une supposition, pas un constat."
+    },
+    {
+      "id": "term-agent",
+      "term": "Agent IA",
+      "shortDefinition": "Assistant qui enchaîne planification, actions et observations jusqu'à l'objectif.",
+      "practicalMeaning": "Plus il a de liberté, plus les conséquences d'une supposition sont graves. Exigez des preuves (sorties réelles) et des environnements de test.",
+      "example": "L'agent affirme « le build est passé » sans l'avoir lancé : exigez la sortie réelle de la commande."
+    },
+    {
+      "id": "term-mcp",
+      "term": "MCP",
+      "shortDefinition": "Protocole standard pour connecter l'IA à des outils et sources de données.",
+      "practicalMeaning": "MCP donne un accès, pas une mémoire ni une connaissance. L'IA peut toujours mal lire ou mal interpréter ce qu'elle récupère.",
+      "example": "Via MCP, l'IA interroge votre base Supabase et affirme : « 3 214 lignes dans la table utilisateurs. » Vérifiable : oui, par la requête elle-même."
+    },
+    {
+      "id": "term-rag",
+      "term": "RAG",
+      "shortDefinition": "Technique qui injecte les passages pertinents de vos documents dans le contexte.",
+      "practicalMeaning": "L'IA répond à partir de vos documents au lieu de sa formation. La qualité dépend des passages retrouvés : vérifiez toujours les citations.",
+      "example": "« Quelles sont nos règles de sauvegarde ? » Sans RAG : réponse générique. Avec RAG : la réponse s'appuie sur le passage retrouvé de votre documentation."
+    },
+    {
+      "id": "term-rules",
+      "term": "Règles de projet (AGENTS.md)",
+      "shortDefinition": "Fichier à la racine du dépôt qui décrit à l'IA comment travailler sur le projet.",
+      "practicalMeaning": "Une source de vérité lue à chaque session par les agents (Claude Code, OpenCode, Cursor). Il consomme des tokens et ne dispense pas de vérifier.",
+      "example": "Dans AGENTS.md : « Lancer bun test avant tout changement ; jamais modifier les .env. » L'agent propose une couleur hors palette, vous pointez la règle, il corrige."
+    },
+    {
+      "id": "term-verification",
+      "term": "Vérification",
+      "shortDefinition": "Le réflexe de contrôler une affirmation avec une source réelle avant de la croire.",
+      "practicalMeaning": "Identifie ce qui est affirmé, décide si c'est vérifiable, formule la question, obtiens la preuve, conclus. Règle d'or : une affirmation sans preuve est une supposition.",
+      "example": "L'IA dit « le build passe » sans sortie de commande. Tu demandes la sortie réelle : avec elle, l'affirmation devient vérifiée."
+    }
+  ]
+}

@@ -1,0 +1,320 @@
+{
+  "pillarId": "parcours",
+  "title": "Parcours d'arrivée",
+  "subtitle": "La carte du territoire avant la route",
+  "description": "Le socle commun à tout le reste : où vivent les choses dans une app web, comment vérifier ce que dit un assistant IA, et le vocabulaire minimal des devs. Trois notions courtes pour démarrer sans peine.",
+  "icon": "\uD83E\uDDFF",
+  "color": "#1E2D4F",
+  "order": 0,
+  "technicalSheet": {
+    "explanation": "Avant de plonger dans les piliers techniques (front, back, base de données, IA), il faut une carte du territoire : une app web c'est des fichiers, un serveur, un navigateur et une base de données. Et comme vous allez travailler avec des assistants IA, il faut aussi apprendre le réflexe de vérification : distinguer ce que l'IA affirme de ce qu'elle prouve. Ce parcours pose ce socle en trois notions courtes, sans jargon.",
+    "utility": "C'est le socle qui rend tout le reste efficace. Comprendre où vit chaque chose vous dit quoi vérifier. Savoir vérifier transforme un assistant IA en outil fiable. Et le vocabulaire minimal (API, commit, build, table) vous permet de comprendre les devs et les IA sans les subir."
+  },
+  "notions": [
+    {
+      "id": "parcours-notion-1",
+      "term": "La carte du territoire",
+      "title": "La carte du territoire : où vivent les choses",
+      "order": 1,
+      "course": {
+        "explanation": "Une app web, c'est quatre endroits. Des fichiers de code, sur ta machine ou dans un dépôt partagé. Un serveur, qui reçoit les demandes des visiteurs et renvoie les pages. Un navigateur, qui affiche la page sur l'écran du visiteur. Et une base de données, qui stocke les données (comptes, articles, commandes). Quand tu changes ton site, tu modifies des fichiers ; quand quelqu'un visite, le serveur envoie ces fichiers au navigateur.",
+        "practicalMeaning": "Connaître cette carte, c'est savoir quoi vérifier. Un bug à l'écran ? C'est souvent le front. Une donnée manquante ? C'est la base de données ou l'API. Un site lent ? C'est le serveur. Quand l'IA te dit « j'ai modifié le fichier », tu sais qu'il faut regarder le fichier ; quand elle dit « c'est en ligne », tu sais qu'il faut regarder le serveur et le domaine.",
+        "example": "Tu tapes www.tonprojet.fr dans le navigateur. Le navigateur envoie une requête au serveur, le serveur renvoie les fichiers de la page, le navigateur affiche la page. Les articles de ton blog, eux, ne sont pas dans la page : ils sont stockés dans la base de données et affichés au passage."
+      },
+      "exercises": [
+        {
+          "id": "ex-p1-1",
+          "type": "qcm_contextualise",
+          "prompt": "Ton site web, tu le construis en écrivant quoi, concrètement ?",
+          "payload": { "options": ["Des fichiers de code, sur ta machine ou dans un dépôt partagé", "Des pages directement sur le site des visiteurs", "Des documents dans ta base de données", "Des variables d'environnement"], "correctIndex": 0 },
+          "relatedTermIds": ["term-fichier"]
+        },
+        {
+          "id": "ex-p1-2",
+          "type": "association_territoire",
+          "prompt": "Où vit l'historique des versions de ton code source ?",
+          "payload": { "term": "Ton code source", "correctPlace": "GitHub", "places": ["GitHub", "Vercel", "Supabase", "Variables d'environnement"] },
+          "relatedTermIds": ["term-fichier", "term-architecture"]
+        },
+        {
+          "id": "ex-p1-3",
+          "type": "qcm_contextualise",
+          "prompt": "Quand un visiteur tape l'adresse de ton site, qui lui envoie la page ?",
+          "payload": { "options": ["Le serveur, via le domaine", "Son navigateur", "Sa base de données", "Son disque dur"], "correctIndex": 0 },
+          "relatedTermIds": ["term-serveur", "term-requete"]
+        },
+        {
+          "id": "ex-p1-4",
+          "type": "association_territoire",
+          "prompt": "Où vit le serveur qui répond aux visiteurs de ton site ?",
+          "payload": { "term": "Le serveur qui répond aux visiteurs", "correctPlace": "Vercel", "places": ["GitHub", "Vercel", "Supabase", "Variables d'environnement"] },
+          "relatedTermIds": ["term-serveur"]
+        },
+        {
+          "id": "ex-p1-5",
+          "type": "qcm_contextualise",
+          "prompt": "Les articles de ton blog et les comptes de tes utilisateurs, où sont-ils stockés ?",
+          "payload": { "options": ["Dans la base de données", "Dans le navigateur du visiteur", "Dans l'historique Git", "Dans les variables d'environnement"], "correctIndex": 0 },
+          "relatedTermIds": ["term-database"]
+        },
+        {
+          "id": "ex-p1-6",
+          "type": "remise_en_ordre",
+          "prompt": "Remets dans l'ordre ce qui se passe quand quelqu'un visite ton site.",
+          "payload": {
+            "steps": ["Tu tapes l'adresse du site dans le navigateur", "Le navigateur envoie une requête au serveur", "Le serveur renvoie les fichiers de la page", "Le navigateur affiche la page"],
+            "correctOrder": [0, 1, 2, 3]
+          },
+          "relatedTermIds": ["term-requete", "term-navigateur"]
+        }
+      ]
+    },
+    {
+      "id": "parcours-notion-2",
+      "term": "Vérification",
+      "title": "Le réflexe de vérification : supposition ou preuve ?",
+      "order": 2,
+      "course": {
+        "explanation": "Un assistant IA prédit du texte plausible : il affirme, il ne prouve pas. Une supposition, c'est une affirmation non vérifiée. Un fait vérifiable, c'est une affirmation que tu peux contrôler avec une source réelle (un fichier, une sortie de commande, une donnée). Le réflexe : identifier ce qui est affirmé, décider si c'est vérifiable, formuler la question de vérification, obtenir la preuve, puis conclure.",
+        "practicalMeaning": "Ce réflexe s'applique à tout dans Vibewiki. L'IA dit « le build passe » sans montrer la sortie de la commande ? C'est une supposition. Elle dit « le serveur est opérationnel » sans l'avoir vérifié ? C'est une supposition. Chaque fois que tu es prêt à accepter, pose la question : quelle preuve, exactement ?",
+        "example": "L'IA te dit : « J'ai corrigé le bug de performance sur ta page d'accueil. » Tu ne vois aucun fichier modifié, aucune mesure. C'est une supposition. Tu réponds : « Montre-moi le fichier modifié et la mesure avant/après. » Avec la preuve, l'affirmation devient fiable."
+      },
+      "exercises": [
+        {
+          "id": "ex-p2-1",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Le build de ton site passe sans erreur. » (Elle ne montre aucune sortie de commande.)",
+          "payload": { "affirmation": "Le build de ton site passe sans erreur.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-verification", "term-preuve"]
+        },
+        {
+          "id": "ex-p2-2",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Un assistant IA a été entraîné sur des données jusqu'à une date donnée. »",
+          "payload": { "affirmation": "Un assistant IA a été entraîné sur des données jusqu'à une date donnée.", "correctAnswer": "vrai" },
+          "relatedTermIds": ["term-verification"]
+        },
+        {
+          "id": "ex-p2-3",
+          "type": "reperage_supposition",
+          "prompt": "Clique sur la phrase qui contient une supposition non vérifiée dans cette réponse d'IA.",
+          "payload": {
+            "text": "J'ai corrigé le bug de performance sur ta page d'accueil, donc tu peux annoncer que tout est réglé.",
+            "suppositionStart": 0,
+            "suppositionEnd": 10
+          },
+          "relatedTermIds": ["term-supposition", "term-preuve"]
+        },
+        {
+          "id": "ex-p2-4",
+          "type": "question_de_verification",
+          "prompt": "L'IA affirme : « Ta page d'accueil a un problème de performance. » Quelle question poses-tu d'abord ?",
+          "payload": { "affirmation": "Ta page d'accueil a un problème de performance.", "options": ["Peux-tu me montrer la mesure et le fichier concerné ?", "Es-tu sûr à cent pour cent ?", "C'est grave ?", "Peux-tu le reformuler plus simplement ?"], "correctIndex": 0 },
+          "relatedTermIds": ["term-verification", "term-architecture"]
+        },
+        {
+          "id": "ex-p2-5",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA dit : « Le serveur de ton site est opérationnel. » Elle n'a rien vérifié. Que contient cette phrase ?",
+          "payload": { "options": ["Une supposition à vérifier", "Une preuve définitive", "Un fait que tu peux prouver toi-même", "Une donnée de ta base"], "correctIndex": 0 },
+          "relatedTermIds": ["term-serveur", "term-supposition"]
+        },
+        {
+          "id": "ex-p2-6",
+          "type": "vrai_faux_pas_verifiable",
+          "prompt": "L'IA affirme : « Tes visiteurs voient le nouveau design sur ton site. » (Elle ne t'a montré aucun aperçu ni déploiement.)",
+          "payload": { "affirmation": "Tes visiteurs voient le nouveau design sur ton site.", "correctAnswer": "pas_verifiable" },
+          "relatedTermIds": ["term-verification", "term-preuve"]
+        }
+      ]
+    },
+    {
+      "id": "parcours-notion-3",
+      "term": "Le vocabulaire des devs",
+      "title": "Le vocabulaire minimal : API, commit, build, table",
+      "order": 3,
+      "course": {
+        "explanation": "Quatre mots reviennent tout le temps. Une API, c'est l'interface que ton site utilise pour parler à un autre service (ex : ta base de données). Un commit, c'est une photo datée de l'état de ton code dans l'historique. Le build, c'est la fabrication de la version de ton site qui sera servie aux visiteurs. Une table, c'est une structure dans la base de données où vivent des lignes de même nature (ex : la table « utilisateurs »).",
+        "practicalMeaning": "Avec ces quatre mots, tu comprends la plupart des phrases des devs et des IA. « Fais un commit » = sauvegarde datée de ton code. « Le build passe » = la version fabriquée se construit sans erreur. « Cette API renvoie les utilisateurs » = une interface te donne ces données. « Ajoute une table » = crée une structure dans la base.",
+        "example": "L'IA te dit : « Le build passe, tu peux publier. » Tu sais maintenant que le build est la version fabriquée du site, et que « ça passe » n'est pas une preuve : demande la sortie réelle de la commande avant de publier."
+      },
+      "exercises": [
+        {
+          "id": "ex-p3-1",
+          "type": "qcm_contextualise",
+          "prompt": "Qu'est-ce qu'une API, concrètement ?",
+          "payload": { "options": ["Une interface que ton site utilise pour parler à un autre service", "Un fichier de configuration", "Un bouton de ton site", "Un langage de programmation"], "correctIndex": 0 },
+          "relatedTermIds": ["term-api"]
+        },
+        {
+          "id": "ex-p3-2",
+          "type": "qcm_contextualise",
+          "prompt": "À quoi sert un commit ?",
+          "payload": { "options": ["À prendre une photo datée de l'état de ton code", "À envoyer un email", "À déployer ton site", "À vider la base de données"], "correctIndex": 0 },
+          "relatedTermIds": ["term-commit"]
+        },
+        {
+          "id": "ex-p3-3",
+          "type": "qcm_contextualise",
+          "prompt": "Qu'est-ce que le build de ton site ?",
+          "payload": { "options": ["La fabrication de la version de ton site qui sera servie aux visiteurs", "Le téléchargement d'un fichier", "Le remplissage de la base de données", "L'envoi d'un email aux utilisateurs"], "correctIndex": 0 },
+          "relatedTermIds": ["term-build"]
+        },
+        {
+          "id": "ex-p3-4",
+          "type": "qcm_contextualise",
+          "prompt": "Qu'est-ce qu'une table dans une base de données ?",
+          "payload": { "options": ["Une structure qui contient des lignes de même nature (ex : les utilisateurs)", "Un formulaire de ton site", "Un fichier de configuration", "Un tableau de bord"], "correctIndex": 0 },
+          "relatedTermIds": ["term-table"]
+        },
+        {
+          "id": "ex-p3-5",
+          "type": "association_territoire",
+          "prompt": "Où vivent les comptes de tes utilisateurs (les « lignes » de ta table) ?",
+          "payload": { "term": "Les comptes de tes utilisateurs", "correctPlace": "Supabase", "places": ["GitHub", "Vercel", "Supabase", "Variables d'environnement"] },
+          "relatedTermIds": ["term-table", "term-database"]
+        },
+        {
+          "id": "ex-p3-6",
+          "type": "association_territoire",
+          "prompt": "Où doivent vivre les clés API et secrets de ton projet ?",
+          "payload": { "term": "Les clés API et secrets de ton projet", "correctPlace": "Variables d'environnement", "places": ["GitHub", "Vercel", "Supabase", "Variables d'environnement"] },
+          "relatedTermIds": ["term-api", "term-verification"]
+        }
+      ]
+    }
+  ],
+  "validationExercises": [
+    {
+      "id": "val-parcours-1",
+      "type": "qcm_contextualise",
+      "prompt": "L'IA te dit : « J'ai corrigé le bug sur la page d'accueil et le build passe. » Elle ne montre aucune sortie de commande. Quelle est la bonne réaction ?",
+      "payload": { "options": ["Demander la preuve : le fichier modifié et la sortie réelle du build", "La croire et publier immédiatement", "Recommencer tout le projet", "Fermer la conversation"], "correctIndex": 0 },
+      "relatedTermIds": ["term-verification", "term-build", "term-architecture"]
+    },
+    {
+      "id": "val-parcours-2",
+      "type": "remise_en_ordre",
+      "prompt": "Remets dans l'ordre le parcours complet d'un visiteur, de la visite à la vérification.",
+      "payload": {
+        "steps": ["Un visiteur tape l'adresse du site", "Le navigateur envoie une requête au serveur", "Le serveur renvoie les fichiers de la page", "Le navigateur affiche la page", "Tu vérifies que tout est réellement affiché et fonctionne"],
+        "correctOrder": [0, 1, 2, 3, 4]
+      },
+      "relatedTermIds": ["term-requete", "term-navigateur", "term-verification"]
+    },
+    {
+      "id": "val-parcours-3",
+      "type": "vrai_faux_pas_verifiable",
+      "prompt": "L'IA affirme : « Le serveur de ton site est opérationnel, tout est en ligne. » (Elle ne l'a pas vérifié.)",
+      "payload": { "affirmation": "Le serveur de ton site est opérationnel, tout est en ligne.", "correctAnswer": "pas_verifiable" },
+      "relatedTermIds": ["term-serveur", "term-verification"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term-architecture",
+      "term": "Architecture d'une app web",
+      "shortDefinition": "La façon dont une app est organisée : fichiers, serveur, navigateur, base de données.",
+      "practicalMeaning": "Savoir où vit chaque chose te dit quoi vérifier : bug à l'écran = front, donnée manquante = base de données, site lent = serveur.",
+      "example": "Taper l'adresse du site : le navigateur envoie une requête au serveur, qui renvoie les fichiers, que le navigateur affiche."
+    },
+    {
+      "id": "term-fichier",
+      "term": "Fichier (code source)",
+      "shortDefinition": "Un fichier texte qui contient du code, la matière première de ton site.",
+      "practicalMeaning": "Changer ton site = modifier des fichiers. Quand l'IA dit « j'ai modifié le fichier », demande lequel et vérifie-le.",
+      "example": "app/page.tsx est un fichier : c'est lui qui décrit la page d'accueil de ton site."
+    },
+    {
+      "id": "term-local",
+      "term": "Local / machine locale",
+      "shortDefinition": "Ce qui se passe sur ton ordinateur, avant d'être partagé ou mis en ligne.",
+      "practicalMeaning": "Tes modifications sont d'abord locales. Ce n'est pas parce que c'est corrigé chez toi que c'est corrigé pour les visiteurs.",
+      "example": "Tu corriges un bug sur ta machine : il est réglé en local, mais les visiteurs verront toujours l'ancienne version tant que tu n'as pas déployé."
+    },
+    {
+      "id": "term-serveur",
+      "term": "Serveur",
+      "shortDefinition": "La machine qui reçoit les demandes des visiteurs et renvoie les pages de ton site.",
+      "practicalMeaning": "Quand quelqu'un dit « le serveur est en panne », il faut le vérifier (statut, logs) — pas le croire sur parole.",
+      "example": "Ton site est hébergé sur un serveur (ex : Vercel) : c'est lui qui répond quand un visiteur tape ton domaine."
+    },
+    {
+      "id": "term-navigateur",
+      "term": "Navigateur (client)",
+      "shortDefinition": "Le programme qui affiche ton site sur l'écran du visiteur (Chrome, Safari…).",
+      "practicalMeaning": "Le navigateur est le « client » : il reçoit les fichiers du serveur et les affiche. Un problème d'affichage est souvent là, pas sur le serveur.",
+      "example": "Si le bouton de ton site ne répond pas au clic, le code est peut-être mal chargé dans le navigateur du visiteur."
+    },
+    {
+      "id": "term-requete",
+      "term": "Requête / Réponse",
+      "shortDefinition": "Le message qu'envoie le navigateur au serveur (requête) et ce que le serveur renvoie (réponse).",
+      "practicalMeaning": "Tout le web fonctionne par requêtes/réponses. Comprendre ça t'aide à lire les messages d'erreur (« 404 » = pas de réponse pour cette adresse).",
+      "example": "Quand tu ouvres ton site, le navigateur envoie une requête au serveur ; si la réponse est « 404 », l'adresse n'existe pas."
+    },
+    {
+      "id": "term-domaine",
+      "term": "Domaine (URL)",
+      "shortDefinition": "L'adresse lisible de ton site, celle que tu tapes dans le navigateur.",
+      "practicalMeaning": "Le domaine pointe vers ton serveur. Si le site « ne répond pas », vérifie d'abord le domaine puis le serveur.",
+      "example": "www.tonprojet.fr est un domaine : quand un visiteur le tape, le navigateur sait où trouver ton serveur."
+    },
+    {
+      "id": "term-database",
+      "term": "Base de données",
+      "shortDefinition": "L'endroit qui stocke les données de ton site (comptes, articles, commandes).",
+      "practicalMeaning": "Les données ne vivent pas dans la page ni dans le navigateur : elles vivent dans la base de données. C'est là qu'il faut chercher une donnée manquante.",
+      "example": "Les articles de ton blog sont dans la base de données : la page les lit et les affiche, elle ne les contient pas."
+    },
+    {
+      "id": "term-verification",
+      "term": "Vérification",
+      "shortDefinition": "Le réflexe de contrôler une affirmation avec une source réelle avant de la croire.",
+      "practicalMeaning": "Identifie ce qui est affirmé, décide si c'est vérifiable, formule la question, obtiens la preuve, conclus. Règle d'or : une affirmation sans preuve est une supposition.",
+      "example": "L'IA dit « le build passe » sans sortie de commande. Tu demandes la sortie réelle : avec elle, l'affirmation devient vérifiée."
+    },
+    {
+      "id": "term-supposition",
+      "term": "Supposition",
+      "shortDefinition": "Une affirmation non vérifiée, présentée comme si elle était un fait.",
+      "practicalMeaning": "Les IA génèrent des suppositions plausibles. Les repérer, c'est savoir quand demander une preuve avant d'agir.",
+      "example": "« Ton serveur est opérationnel » dit sans avoir rien vérifié : c'est une supposition, pas un constat."
+    },
+    {
+      "id": "term-preuve",
+      "term": "Preuve vérifiable",
+      "shortDefinition": "Une source réelle qui confirme une affirmation : fichier, sortie de commande, donnée.",
+      "practicalMeaning": "Demande toujours la preuve exacte : quelle commande, quelle sortie, quel fichier, quelle ligne. Une preuve, c'est concret et montrable.",
+      "example": "« Le build passe » devient vérifié quand l'IA te montre la sortie réelle de la commande de build."
+    },
+    {
+      "id": "term-api",
+      "term": "API",
+      "shortDefinition": "L'interface que ton site utilise pour parler à un autre service.",
+      "practicalMeaning": "Quand l'IA dit « cette API renvoie les utilisateurs », elle parle d'une interface qui te donne des données. Vérifie ce qu'elle renvoie vraiment.",
+      "example": "Ton site demande à une API « donne-moi la liste des utilisateurs » : l'API répond avec les données de la base."
+    },
+    {
+      "id": "term-commit",
+      "term": "Commit (Git)",
+      "shortDefinition": "Une photo datée de l'état de ton code dans l'historique du projet.",
+      "practicalMeaning": "« Fais un commit » = sauvegarde datée de ton code. Ça permet de revenir en arrière et de comprendre ce qui a changé.",
+      "example": "Tu corriges un bug puis tu fais un commit : l'historique garde une trace claire de cette correction."
+    },
+    {
+      "id": "term-build",
+      "term": "Build",
+      "shortDefinition": "La fabrication de la version de ton site qui sera servie aux visiteurs.",
+      "practicalMeaning": "« Le build passe » ne veut pas dire « c'est en ligne » ni « c'est prouvé » : demande la sortie de la commande pour vérifier.",
+      "example": "Avant de publier, ton code est transformé en version prête à servir : c'est le build."
+    },
+    {
+      "id": "term-table",
+      "term": "Table (base de données)",
+      "shortDefinition": "Une structure dans la base de données qui contient des lignes de même nature.",
+      "practicalMeaning": "« Ajoute une table » = crée une structure dans la base. Chaque ligne est un élément (ex : un utilisateur).",
+      "example": "La table « utilisateurs » contient une ligne par utilisateur, avec ses colonnes (nom, email, date d'inscription)."
+    }
+  ]
+}

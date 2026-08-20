@@ -5,6 +5,15 @@
   },
   "fiches": [
     {
+      "pillar": "parcours",
+      "term": "Vérification",
+      "analogie": "C'est comme un acheteur qui vérifie la date de péremption avant de payer : on ne croit pas l'étiquette, on regarde le produit.",
+      "ou_ca_vit": "Dans la conversation avec l'assistant IA : chaque affirmation est soit une supposition, soit une preuve montrable (fichier, sortie de commande, donnée).",
+      "red_flag_ia": "L'IA dit « c'est fait », « ça marche », « c'est en ligne » sans jamais montrer la sortie réelle, le fichier modifié ou la mesure.",
+      "prompt_verification": "Peux-tu me montrer la preuve exacte de cette affirmation : quelle commande as-tu lancée, quelle est la sortie, quel fichier est modifié, quelle ligne ?",
+      "question_cle": "Cette affirmation est-elle vérifiable ici et maintenant, ou s'agit-il d'une supposition ?"
+    },
+    {
       "pillar": "transversal",
       "term": "Commit",
       "analogie": "C'est comme sauvegarder un document Word sous un nouveau nom explicite ('Rapport_v2_final_CORRIGE') au lieu d'écraser l'original.",

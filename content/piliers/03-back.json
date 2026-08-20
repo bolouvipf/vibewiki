@@ -95,8 +95,15 @@
           "id": "ex-back-secu",
           "type": "question_de_verification",
           "prompt": "L'IA propose de stocker les mots de passe en clair dans la base de données pour simplifier. Quelle question devez-vous poser ?",
-          "payload": {},
+          "payload": { "affirmation": "Je vais stocker les mots de passe en clair pour simplifier.", "options": ["Comment les mots de passe sont-ils hachés et vérifiés ?", "Est-ce que ça va accélérer le site ?", "Quelle couleur pour le formulaire ?", "Peux-tu faire un commit ?"], "correctIndex": 0 },
           "relatedTermIds": ["term-auth"]
+        },
+        {
+          "id": "ex-back-cumul",
+          "type": "qcm_contextualise",
+          "prompt": "Après une modification d'authentification, l'API renvoie un code 401 pour l'utilisateur connecté. Que vérifiez-vous en premier ?",
+          "payload": { "options": ["Si le token a expiré ou n'est pas envoyé avec la requête", "Le CSS de la page", "Le cache navigateur", "Les polices du site"], "correctIndex": 0 },
+          "relatedTermIds": ["term-auth", "term-token", "term-http-status"]
         }
       ]
     },
@@ -129,14 +136,14 @@
           "id": "ex-back-diag-3",
           "type": "reperage_supposition",
           "prompt": "Repérez la supposition : « Le timeout vient probablement d'une boucle infinie dans la fonction, d'après ce que je vois dans le code. »",
-          "payload": { "text": "Le timeout vient probablement d'une boucle infinie dans la fonction, d'après ce que je vois.", "suppositionStart": 2, "suppositionEnd": 5 },
+          "payload": { "text": "Le timeout vient probablement d'une boucle infinie dans la fonction, d'après ce que je vois.", "suppositionStart": 0, "suppositionEnd": 10 },
           "relatedTermIds": ["term-supposition"]
         },
         {
           "id": "ex-back-diag-4",
           "type": "question_de_verification",
           "prompt": "L'IA affirme : « La fonction serverless a échoué par manque de mémoire. » Comment pouvez-vous vérifier ?",
-          "payload": {},
+          "payload": { "affirmation": "La fonction serverless a échoué par manque de mémoire.", "options": ["Consulter les logs de la fonction (erreur et consommation mémoire)", "Relancer la fonction et voir", "Changer de navigateur", "Demander à un collègue"], "correctIndex": 0 },
           "relatedTermIds": ["term-log", "term-back"]
         },
         {
@@ -148,6 +155,13 @@
             "correctOrder": [0, 1, 2, 3, 4]
           },
           "relatedTermIds": ["term-http-status", "term-log", "term-api"]
+        },
+        {
+          "id": "ex-back-cumul-parcours",
+          "type": "question_de_verification",
+          "prompt": "L'IA affirme : « Le serveur de ton site est en panne. » (Elle ne t'a montré aucun statut.) Rappel du parcours : une affirmation sans preuve est une supposition. Quelle question poses-tu ?",
+          "payload": { "affirmation": "Le serveur de ton site est en panne.", "options": ["Montre-moi le statut du serveur et les logs réels", "C'est grave ?", "Es-tu sûr à cent pour cent ?", "Ça arrive souvent ?"], "correctIndex": 0 },
+          "relatedTermIds": ["term-serveur", "term-api", "term-log"]
         }
       ]
     }
@@ -164,7 +178,7 @@
       "id": "val-back-2",
       "type": "question_de_verification",
       "prompt": "L'IA dit : « L'utilisateur n'est pas authentifié car son token a expiré, et c'est pour ça que l'API renvoie une erreur 401. » Quelle question posez-vous pour vérifier ?",
-      "payload": {},
+      "payload": { "affirmation": "L'utilisateur n'est pas authentifié car son token a expiré, d'où l'erreur 401.", "options": ["Peux-tu me montrer la réponse exacte de l'API et l'heure d'expiration du token ?", "C'est grave ?", "Est-ce que ça arrive souvent ?", "Peux-tu redémarrer le serveur ?"], "correctIndex": 0 },
       "relatedTermIds": ["term-auth", "term-token", "term-http-status"]
     },
     {
@@ -234,6 +248,27 @@
       "shortDefinition": "Fonction exécutée à la demande sur le cloud, sans serveur permanent.",
       "practicalMeaning": "Du code qui ne tourne que quand on l'appelle. Pas de serveur à gérer (d'où le nom), mais des limites : temps d'exécution max, mémoire max. Si une fonction serverless met trop de temps, elle est tuée.",
       "example": "L'IA crée une fonction qui génère un PDF à la demande. Vous cliquez sur « Télécharger la facture ». La fonction s'exécute, génère le PDF, et s'éteint. Si le PDF prend plus de 10 secondes, la fonction est arrêtée — et vous obtenez une erreur timeout."
+    },
+    {
+      "id": "term-log",
+      "term": "Log serveur",
+      "shortDefinition": "Journal chronologique des événements et erreurs d'un serveur.",
+      "practicalMeaning": "C'est la trace écrite de ce qui s'est réellement passé côté serveur : chaque erreur y laisse un message. Quand l'IA affirme une cause, les logs permettent de confirmer ou d'infirmer.",
+      "example": "L'IA dit : « L'erreur vient d'une boucle infinie. » Vous ouvrez les logs : « timeout après 30s ». La cause réelle est un timeout, pas une boucle infinie — l'IA a supposé."
+    },
+    {
+      "id": "term-supposition",
+      "term": "Supposition",
+      "shortDefinition": "Hypothèse non vérifiée présentée comme un fait.",
+      "practicalMeaning": "L'IA raisonne par probabilité : parfois elle affirme une cause plausible sans preuve. Repérer une supposition, c'est refuser de valider « par défaut » et demander la vérification (logs, sortie réelle, source).",
+      "example": "« Le timeout vient probablement d'une boucle infinie. » Le mot « probablement » et l'absence de preuve signalent une supposition : demandez les logs avant d'agir."
+    },
+    {
+      "id": "term-serveur",
+      "term": "Serveur",
+      "shortDefinition": "La machine qui reçoit les demandes des visiteurs et renvoie les pages de ton site.",
+      "practicalMeaning": "Quand quelqu'un dit « le serveur est en panne », il faut le vérifier (statut, logs) — pas le croire sur parole.",
+      "example": "Ton site est hébergé sur un serveur (ex : Vercel) : c'est lui qui répond quand un visiteur tape ton domaine."
     }
   ]
 }

@@ -11,10 +11,12 @@ import type { Term } from "@/lib/db/schema"
 
 const PILLARS: { label: string; value: Term["pillar"] | null }[] = [
   { label: "Tous", value: null },
+  { label: "Parcours", value: "parcours" },
   { label: "Transversal", value: "transversal" },
   { label: "Frontend", value: "front" },
   { label: "Backend", value: "back" },
   { label: "Database", value: "database" },
+  { label: "IA", value: "ia" },
 ]
 
 const MASTERY_LABELS: Record<string, string> = {

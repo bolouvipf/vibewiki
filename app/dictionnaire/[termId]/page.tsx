@@ -11,10 +11,12 @@ import { getTerm } from "@/lib/db/queries"
 import type { Term } from "@/lib/db/schema"
 
 const pillarLabels: Record<Term["pillar"], string> = {
+  parcours: "Parcours d'arriv\u00E9e",
   transversal: "Outils transversaux",
   front: "Frontend",
   back: "Backend",
   database: "Base de donn\u00E9es",
+  ia: "Piloter son IA",
 }
 
 const masteryLabels: Record<Term["masteryLevel"], string> = {
@@ -24,10 +26,12 @@ const masteryLabels: Record<Term["masteryLevel"], string> = {
 }
 
 const pillarIcons: Record<string, string> = {
+  parcours: "\uD83E\uDDFF",
   transversal: "\u2699\uFE0F",
   front: "\uD83C\uDFA8",
   back: "\u2699\uFE0F",
   database: "\uD83D\uDCC4",
+  ia: "\uD83E\uDD16",
 }
 
 export default function TermPage() {

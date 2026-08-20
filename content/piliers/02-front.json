@@ -95,7 +95,7 @@
           "id": "ex-front-diag",
           "type": "question_de_verification",
           "prompt": "L'IA dit : « La page blanche vient d'une erreur JavaScript. » Comment vérifier cette affirmation ?",
-          "payload": {},
+          "payload": { "affirmation": "La page blanche vient d'une erreur JavaScript.", "options": ["Ouvrir la console (F12) et regarder l'erreur affichée", "Redémarrer l'ordinateur", "Vider le cache du navigateur", "Demander à l'IA de réessayer"], "correctIndex": 0 },
           "relatedTermIds": ["term-console"]
         },
         {
@@ -139,15 +139,22 @@
           "id": "ex-front-diag-3",
           "type": "reperage_supposition",
           "prompt": "Repérez la supposition : « L'erreur d'affichage vient probablement d'un cache navigateur obsolète. Essayez de vider le cache. »",
-          "payload": { "text": "L'erreur d'affichage vient probablement d'un cache navigateur obsolète. Essayez de vider le cache.", "suppositionStart": 4, "suppositionEnd": 7 },
+          "payload": { "text": "L'erreur d'affichage vient probablement d'un cache navigateur obsolète. Essayez de vider le cache.", "suppositionStart": 0, "suppositionEnd": 8 },
           "relatedTermIds": ["term-cache"]
         },
         {
           "id": "ex-front-diag-4",
           "type": "question_de_verification",
           "prompt": "L'IA vous dit : « Le style ne s'applique pas à cause d'un problème de spécificité CSS. » Comment vérifier par vous-même ?",
-          "payload": {},
+          "payload": { "affirmation": "Le style ne s'applique pas à cause d'un problème de spécificité CSS.", "options": ["Inspecter l'élément (clic droit > Inspecter) et regarder quelles règles CSS s'appliquent", "Supprimer tout le CSS", "Redémarrer le serveur", "Changer de navigateur"], "correctIndex": 0 },
           "relatedTermIds": ["term-css"]
+        },
+        {
+          "id": "ex-front-cumul-parcours",
+          "type": "qcm_contextualise",
+          "prompt": "L'IA affirme : « Tes visiteurs voient le nouveau design. » (Rien n'a été déployé.) Rappel du parcours : le navigateur du visiteur affiche ce que le serveur renvoie. Que se passe-t-il en réalité ?",
+          "payload": { "options": ["Le navigateur du visiteur affiche toujours l'ancienne version tant que rien n'est déployé", "Le navigateur se met à jour tout seul", "Le visiteur voit le nouveau design instantanément", "Le navigateur du visiteur lit directement ton code local"], "correctIndex": 0 },
+          "relatedTermIds": ["term-navigateur", "term-console"]
         }
       ]
     }
@@ -234,6 +241,20 @@
       "shortDefinition": "Outil du navigateur qui affiche erreurs et messages techniques (accessible via F12).",
       "practicalMeaning": "C'est la première chose à ouvrir quand quelque chose ne s'affiche pas correctement. Elle montre les erreurs JavaScript, les requêtes réseau et les avertissements.",
       "example": "Vous appuyez sur F12, cliquez sur l'onglet « Console », et lisez : « Uncaught TypeError: user.name is undefined ». L'IA confirme : « En effet, l'API n'a pas renvoyé le champ 'name' pour cet utilisateur. »"
+    },
+    {
+      "id": "term-cache",
+      "term": "Cache navigateur",
+      "shortDefinition": "Copie locale des fichiers du site qui accélère les chargements suivants.",
+      "practicalMeaning": "Le navigateur mémorise une version des fichiers pour éviter de tout retélécharger. Un cache obsolète peut afficher une ancienne version du site — d'où le réflexe « vider le cache » quand une modification ne s'affiche pas.",
+      "example": "L'IA modifie le CSS du bouton. Vous rafraîchissez : rien ne change. La cause possible : le navigateur affiche l'ancien CSS en cache. Une actualisation forcée (Ctrl+Shift+R) ou un vidage du cache règle souvent le problème."
+    },
+    {
+      "id": "term-navigateur",
+      "term": "Navigateur (client)",
+      "shortDefinition": "Le programme qui affiche ton site sur l'écran du visiteur (Chrome, Safari…).",
+      "practicalMeaning": "Le navigateur est le « client » : il reçoit les fichiers du serveur et les affiche. Un problème d'affichage est souvent là, pas sur le serveur.",
+      "example": "Si le bouton de ton site ne répond pas au clic, le code est peut-être mal chargé dans le navigateur du visiteur."
     }
   ]
 }

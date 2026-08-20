@@ -1,12 +1,14 @@
 import Dexie, { type EntityTable } from "dexie"
 
+export type PillarId = "parcours" | "transversal" | "front" | "back" | "database" | "ia"
+
 export interface Term {
   id: string
   term: string
   shortDefinition: string
   practicalMeaning: string
   example: string
-  pillar: "transversal" | "front" | "back" | "database"
+  pillar: PillarId
   masteryLevel: "decouvert" | "en_cours" | "maitrise"
   firstSeenAt: string
   masteredAt?: string
@@ -40,11 +42,13 @@ export interface UserProgress {
   dailyChallengeCompleted: boolean
   dailyChallengeDate: string
   dailyChallengeProgress: number
+  // Parcours d'arrivée
+  parcoursPassed: boolean
 }
 
 export interface CachedNotion {
   id: string
-  pillarId: "transversal" | "front" | "back" | "database"
+  pillarId: PillarId
   title: string
   order: number
   exercises: unknown[]

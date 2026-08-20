@@ -177,7 +177,7 @@ export default function ProfilPage() {
 
       {/* Badges */}
       <h2 className="font-heading text-sm font-semibold text-ink/60 mb-3 uppercase tracking-wider">
-        Badges {state.badges.length > 0 && <span className="text-compass">· {state.badges.length}/{10}</span>}
+        Badges {state.badges.length > 0 && <span className="text-compass">· {state.badges.length}/{11}</span>}
       </h2>
       <div className="mb-8">
         <BadgeGrid unlockedIds={state.badges} />

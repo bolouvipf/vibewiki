@@ -93,6 +93,7 @@ export async function getProgress() {
       dailyChallengeCompleted: false,
       dailyChallengeDate: "",
       dailyChallengeProgress: 0,
+      parcoursPassed: false,
     } as UserProgress
     // put (upsert) plutôt qu'add : plusieurs appels concurrents au premier
     // chargement (page d'accueil) ne doivent jamais lever ConstraintError.
@@ -116,6 +117,7 @@ export async function migrateProgress() {
   if (p.dailyChallengeCompleted === undefined) updates.dailyChallengeCompleted = false
   if (p.dailyChallengeDate === undefined) updates.dailyChallengeDate = ""
   if (p.dailyChallengeProgress === undefined) updates.dailyChallengeProgress = 0
+  if (p.parcoursPassed === undefined) updates.parcoursPassed = false
   if (Object.keys(updates).length > 0) await updateProgress(updates)
 }
 
@@ -158,6 +160,15 @@ export async function validatePillar(pillarId: string) {
   await db.progress.update(DEFAULT_USER_ID, {
     validatedPillarIds: p.validatedPillarIds,
   })
+}
+
+export async function passParcours() {
+  await updateProgress({ parcoursPassed: true })
+}
+
+export async function isParcoursUnlocked() {
+  const p = await getProgress()
+  return p.parcoursPassed || p.validatedPillarIds.includes("parcours")
 }
 
 export async function getDueReviews() {

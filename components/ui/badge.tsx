@@ -7,10 +7,12 @@ const masteryStyles = {
 } as const
 
 const pillarStyles: Record<string, string> = {
+  parcours: "bg-marine/5 text-marine border-marine/10",
   transversal: "bg-marine/5 text-marine border-marine/10",
   front: "bg-compass/5 text-compass border-compass/10",
   back: "bg-alert/5 text-alert border-alert/10",
   database: "bg-moss/5 text-moss border-moss/10",
+  ia: "bg-ink/5 text-ink border-ink/10",
 }
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {

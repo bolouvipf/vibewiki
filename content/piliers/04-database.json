@@ -54,7 +54,7 @@
           "id": "ex-db-schema",
           "type": "question_de_verification",
           "prompt": "L'IA propose d'ajouter une colonne à une table existante. Comment s'appelle cette opération et pourquoi faut-il être prudent ?",
-          "payload": {},
+          "payload": { "affirmation": "J'ajoute une colonne à la table existante, sans risque.", "options": ["C'est une migration : demande-t-elle un test sur l'environnement de développement d'abord ?", "C'est un commit : est-ce que ça accélère le site ?", "C'est un index : est-ce que ça change les couleurs ?", "C'est un trigger : est-ce que ça supprime des données ?"], "correctIndex": 0 },
           "relatedTermIds": ["term-schema", "term-migration"]
         }
       ]
@@ -95,7 +95,7 @@
           "id": "ex-db-migration",
           "type": "question_de_verification",
           "prompt": "L'IA dit : « J'ai fait une migration pour ajouter la colonne âge. » Qu'est-ce qu'une migration et pourquoi la tester d'abord ?",
-          "payload": {},
+          "payload": { "affirmation": "J'ai fait une migration pour ajouter la colonne âge.", "options": ["Cette migration a-t-elle été testée sur l'environnement de développement avant la production ?", "Est-ce que la colonne est jolie ?", "Peux-tu la faire sans avertir ?", "Est-ce que ça met à jour le CSS ?"], "correctIndex": 0 },
           "relatedTermIds": ["term-migration", "term-schema"]
         }
       ]
@@ -122,7 +122,7 @@
           "id": "ex-db-diag-2",
           "type": "reperage_supposition",
           "prompt": "Repérez la supposition : « Cette table est à l'origine de la réponse NULL que vous voyez dans l'API, je le sais car le champ 'name' est vide. »",
-          "payload": { "text": "Cette table est à l'origine de la réponse NULL que vous voyez dans l'API.", "suppositionStart": 0, "suppositionEnd": 3 },
+          "payload": { "text": "Cette table est à l'origine de la réponse NULL que vous voyez dans l'API.", "suppositionStart": 0, "suppositionEnd": 14 },
           "relatedTermIds": ["term-table", "term-null", "term-supposition"]
         },
         {
@@ -146,8 +146,15 @@
           "id": "ex-db-diag-5",
           "type": "question_de_verification",
           "prompt": "L'IA prétend : « Le trigger a mal mis à jour la table. » Comment vérifier si un trigger s'est bien exécuté ?",
-          "payload": {},
+          "payload": { "affirmation": "Le trigger a mal mis à jour la table.", "options": ["Consulter les logs de la base et vérifier les données effectivement modifiées", "Redémarrer le site", "Supprimer le trigger", "Changer de base de données"], "correctIndex": 0 },
           "relatedTermIds": ["term-trigger", "term-log", "term-supabase"]
+        },
+        {
+          "id": "ex-db-cumul-parcours",
+          "type": "qcm_contextualise",
+          "prompt": "Rappel du parcours : les données (comptes, articles) vivent dans la base de données, pas dans la page. L'IA dit : « J'ai ajouté la colonne à la page, la donnée va apparaître. » Que manque-t-il ?",
+          "payload": { "options": ["Vérifier que la colonne existe dans la table et que les données sont bien remontées", "Rien : c'est suffisant", "Vider le cache du navigateur", "Refaire un commit"], "correctIndex": 0 },
+          "relatedTermIds": ["term-table", "term-sql-query", "term-supabase"]
         }
       ]
     }
@@ -164,7 +171,7 @@
       "id": "val-db-2",
       "type": "question_de_verification",
       "prompt": "L'IA dit : « La migration n'a pas fonctionné car une contrainte de clé étrangère est violée. Il faut supprimer les lignes orphelines d'abord. » Comment vérifier si des lignes orphelines existent ?",
-      "payload": {},
+      "payload": { "affirmation": "La migration a échoué car une contrainte de clé étrangère est violée par des lignes orphelines.", "options": ["Exécuter une requête SQL qui liste les lignes de la table enfant sans correspondance dans la table parente", "Relancer la migration plusieurs fois", "Vider la table entière", "Redémarrer Supabase"], "correctIndex": 0 },
       "relatedTermIds": ["term-migration", "term-contrainte", "term-relation", "term-sql-query"]
     },
     {
@@ -248,6 +255,20 @@
       "shortDefinition": "Structure qui accélère la recherche dans une table.",
       "practicalMeaning": "Comme l'index d'un livre : au lieu de parcourir toutes les pages (lignes), l'index vous mène directement à la bonne page. Accélère les recherches mais ralentit les écritures.",
       "example": "Votre site ralentit quand vous cherchez un utilisateur par email. L'IA ajoute un index sur la colonne email. Maintenant la recherche prend 20 ms au lieu de 2 secondes."
+    },
+    {
+      "id": "term-log",
+      "term": "Log base de données",
+      "shortDefinition": "Journal des événements et erreurs de la base de données.",
+      "practicalMeaning": "Chaque requête et chaque erreur SQL laisse une trace consultable (dans Supabase notamment). Les logs permettent de confirmer si une migration, un trigger ou une requête a réellement échoué.",
+      "example": "L'IA dit : « Le trigger a échoué. » Vous ouvrez les logs Supabase et lisez l'erreur exacte du trigger avec son message : la cause devient vérifiable."
+    },
+    {
+      "id": "term-supposition",
+      "term": "Supposition",
+      "shortDefinition": "Hypothèse non vérifiée présentée comme un fait.",
+      "practicalMeaning": "L'IA raisonne par probabilité : parfois elle affirme une cause plausible sans preuve. Repérer une supposition, c'est refuser de valider « par défaut » et demander la vérification (requête SQL, logs, données réelles).",
+      "example": "« Cette table est à l'origine de la réponse NULL. » Sans requête SQL qui le prouve, c'est une supposition : vérifiez avec SELECT avant de corriger."
     }
   ]
 }

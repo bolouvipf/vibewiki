@@ -7,18 +7,22 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { getProgress, isPillarValidated } from "@/lib/db/queries"
+import pillar0 from "@/content/piliers/00-parcours.json"
 import pillar1 from "@/content/piliers/01-transversal.json"
 import pillar2 from "@/content/piliers/02-front.json"
 import pillar3 from "@/content/piliers/03-back.json"
 import pillar4 from "@/content/piliers/04-database.json"
+import pillar5 from "@/content/piliers/05-ia.json"
 
-const pillars = [pillar1, pillar2, pillar3, pillar4]
+const pillars = [pillar0, pillar1, pillar2, pillar3, pillar4, pillar5]
 
 const pillarColors: Record<string, { primary: string; light: string; text: string }> = {
+  parcours: { primary: "bg-marine", light: "bg-marine/10", text: "text-marine" },
   transversal: { primary: "bg-marine", light: "bg-marine/10", text: "text-marine" },
   front: { primary: "bg-compass", light: "bg-compass/10", text: "text-compass" },
   back: { primary: "bg-alert", light: "bg-alert/10", text: "text-alert" },
   database: { primary: "bg-moss", light: "bg-moss/10", text: "text-moss" },
+  ia: { primary: "bg-ink", light: "bg-ink/10", text: "text-ink" },
 }
 
 export default function PillarPage() {

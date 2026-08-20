@@ -8,6 +8,10 @@ dev-err.txt
 .env
 .env.*
 !.env.example
+!.env.local.example
 
 # Service worker généré par le build (Serwist)
 public/sw.js
+
+# Documents de travail (références OpenCode/Claude) — pas dans le dépôt
+VIBEWIKI_*.md
