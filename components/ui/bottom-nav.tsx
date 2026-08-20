@@ -7,6 +7,7 @@ const tabs = [
   { label: "Territoire", href: "/", icon: "\uD83E\uDE9C" },
   { label: "Piliers", href: "/piliers/transversal", icon: "\uD83D\uDCD6" },
   { label: "Dictionnaire", href: "/dictionnaire", icon: "\uD83D\uDCDD" },
+  { label: "Assistant", href: "/assistant", icon: "\u2728" },
   { label: "Profil", href: "/profil", icon: "\uD83D\uDC64" },
 ] as const
 
